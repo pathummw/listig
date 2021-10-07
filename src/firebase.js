@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
+
+
 
 
 const firebaseConfig = {
@@ -18,7 +20,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
-
 
 
 export function signup(email, password) {
@@ -61,6 +62,7 @@ function writeUserData(userId, name, email, imageUrl) {
 
 
 export function signin(email, password) {
+
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             //Signed in
@@ -73,7 +75,8 @@ export function signin(email, password) {
                 console.log(user.email)
                 console.log(user.uid)
             } */
-            console.log(auth.currentUser.uid)
+            sessionStorage.setItem('authUser', auth.currentUser.uid);  //Save the signed in user id in session storage
+
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -84,19 +87,36 @@ export function signin(email, password) {
 const user = auth.currentUser;
 
 
-export function authStateChanged() {
-    console.log("Current user" + user)
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const uid = user.id;
 
-            console.log("UID: " + uid)
+//This onAuthStateChanged called automatically after signin fun. and sign out func.
+/* onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("User signed In: OnAuthstatgeChanged")
+        const uid = user.uid;
 
-        } else {
-            //User signed out
-            console.log("User signed out")
-        }
-    })
+        console.log("UID: " + uid)
+        setUserId(uid)
+
+    } else {
+        //User signed out
+        console.log("User signed out: OnAuthstatgeChanged")
+
+    }
+}) */
+
+
+
+
+export function doSignOut() {
+    signOut(auth).then(() => {
+        // Remove all saved data from sessionStorage
+        sessionStorage.clear();
+        // Sign-out successful.
+        console.log("Sign-out successful")
+    }).catch((error) => {
+        // An error happened.
+        console.log("Erro Sign-out")
+    });
 }
 
 

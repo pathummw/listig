@@ -11,7 +11,7 @@ export default function SignUp() {
 
         e.preventDefault()
         signup(emailRef.current.value, passwordRef.current.value)
-        console.log(emailRef.current.value)
+        /* console.log(emailRef.current.value) */
     }
 
 
