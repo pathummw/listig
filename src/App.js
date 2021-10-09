@@ -1,15 +1,22 @@
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import { useEffect, useState, useContext } from 'react'
-import { AuthUserContext } from './SignIn'
+import { useEffect, useState, useContext, Component, createContext } from 'react'
+/* import { AuthUserContext } from './SignIn' */
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Home from "./Home";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import PrivateRoute from "./PrivateRoute";
+import NewListPopup from "./NewListPopup";
+import ShoppingList from "./ShoppingList";
+
+const AuthUserContext = createContext();
 
 function App() {
 
 
 
   const [currentUser, setCurrentUser] = useState(null)
+  const [isUserSignedIn, setIsUserSignedIn] = useState(false)
   /* const [uid, setUid] = useState(); */
 
   /*  const value = useContext(AuthUserContext); */
@@ -18,50 +25,49 @@ function App() {
   useEffect(() => {
 
 
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("User signed In: OnAuthstatgeChanged")
         const uid = user.uid;
         console.log("UID: " + uid)
         setCurrentUser(uid)
+        setIsUserSignedIn(true)
         console.log("Current USER: " + currentUser)
       } else {
         console.log("User signed out: OnAuthstatgeChanged")
         setCurrentUser(null)
+        setIsUserSignedIn(false)
       }
     })
 
-
+    return unsubscribe;  //when unmount component, unsubscribe onAuthStateChanged
 
 
   }, [])
 
-  const setUser = (e) => {
-    console.log("Callback func")
-    console.log("Call back E: " + e);
-  }
-
-
 
   return (
-    <div>
-      <h1>Hello App</h1>
-      {/* <SignUp /> */}
-      <SignIn />
-      <h3>Current user {currentUser}</h3>
-      {currentUser && (
-
-        <Home currentUser={currentUser} />
-      )
-
-      }
-
-    </div>
+    <AuthUserContext.Provider value={currentUser} >
+      <Router>
+        <div>
+          <Switch>
+            {/* <Route path="/signin" component={SignIn} /> */}
+            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/signin" component={SignIn} />
+            <Route path="/create-new-list" component={NewListPopup} />
+            <Route path="/shopping-list" component={ShoppingList} />
+          </Switch>
+        </div>
+      </Router>
+    </AuthUserContext.Provider>
   );
+
+
 }
 
 export default App;
-
+export { AuthUserContext };
 
 
 /* const newContext = React.createContext({ color: 'black' });

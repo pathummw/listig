@@ -1,12 +1,18 @@
 import { useRef, useState, createContext } from 'react'
+import { Link, useHistory } from 'react-router-dom';
 import { signin } from "./firebase"
-import { doSignOut } from "./firebase"
 
-const AuthUserContext = createContext();
+/* const history = useHistory() */
+
+
+/* const AuthUserContext = createContext(); */
 
 export default function SignIn() {
     const emailRef = useRef()
     const passwordRef = useRef()
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+    const history = useHistory()
 
     const [authUid, setAuthUid] = useState();
 
@@ -14,35 +20,39 @@ export default function SignIn() {
 
 
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
-        (signin(emailRef.current.value, passwordRef.current.value))
+        try {
+            setError('')
+            setLoading(true)
+            await signin(emailRef.current.value, passwordRef.current.value)
+            history.push('/')
+        } catch {
+            setError("Failed to sign in")
+        }
 
-
+        setLoading(false)
     }
 
-    const handleSignOut = () => {
-        doSignOut()
-    }
+
 
     return (
 
-        <AuthUserContext.Provider value={5} >
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <input type="email" ref={emailRef} name="" id="" />
-                    <input type="password" ref={passwordRef} name="" id="" />
-                    <button>Sign in</button>
-                </form>
-                <span>{sessionStorage.getItem('authUser')}</span>
+        <div>
+            <h1>Sign in</h1>
+            <form onSubmit={handleSubmit}>
+                <input type="email" ref={emailRef} />
+                <input type="password" ref={passwordRef} />
+                <button>Sign in</button>
+            </form>
+            <span>{sessionStorage.getItem('authUser')}</span>
+            <span>Need an account? <Link to="/signup">Sign up</Link> </span>
 
-                <button onClick={() => handleSignOut()}>Sign out</button>
-            </div>
-        </AuthUserContext.Provider>
+        </div>
     )
 
     /*  export default AuthUserContext; */
 }
 
-export { AuthUserContext };
+/* export { AuthUserContext }; */
 
