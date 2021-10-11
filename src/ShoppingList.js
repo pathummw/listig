@@ -3,15 +3,34 @@ import { useLocation } from 'react-router-dom'
 import Select from 'react-select'
 import styled from 'styled-components'
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import Checkbox from '@mui/material/Checkbox';
 
 
+const MainContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+`
+const ShoppingListContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+const SearchBox = styled.div`
+    /* position: fixed;
+    top: 100px; */
+`
+const Ul = styled.ul`
+    list-style-type: none;
+    padding: 0;
+`
 const Li = styled.li`
-background-color: #333333;
-color: white;
-padding: 5px;
-margin: 5px auto;
-border-radius: 5px;
-
+    background-color: whitesmoke;
+    color: #aaa;
+    padding: 5px;
+    margin: 5px auto;
+    border-radius: 5px;
 `
 
 export default function ShoppingList() {
@@ -25,12 +44,12 @@ export default function ShoppingList() {
     ]
 
     return (
-        <div>
+        <MainContainer>
             <h1>Here is your shopping list {name}</h1>
             {console.log(name)}
             <SearchBar options={options} />
 
-        </div>
+        </MainContainer>
     )
 }
 
@@ -57,10 +76,15 @@ const SearchBar = ({ options }) => {
 
     return (
         <>
-            <Select options={options}
-                onChange={handleChange}
-            />
+
+
+            <SearchBox>
+                <Select options={options}
+                    onChange={handleChange}
+                />
+            </SearchBox>
             <ShoppingItemsList myshoppingList={myshoppingList} />
+
         </>
     );
 }
@@ -68,17 +92,17 @@ const SearchBar = ({ options }) => {
 const ShoppingItemsList = ({ myshoppingList }) => {
     console.log(myshoppingList)
     return (
-        <div>
+        <ShoppingListContainer>
 
             <h3>Items list</h3>
             <SwipeableList>
-                <ul>
+                <Ul>
                     {myshoppingList.map(item => (
                         <Item item={item} />
                     ))}
-                </ul>
+                </Ul>
             </SwipeableList>
-        </div>
+        </ShoppingListContainer>
 
     );
 }
@@ -95,7 +119,7 @@ const Item = ({ item }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             >
-                <Li>{item.label}</Li>
+                <Li> <Checkbox /> {item.label} <FontAwesomeIcon icon={faCoffee} /> </Li>
             </SwipeableListItem>
         </div>
     )
