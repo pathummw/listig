@@ -8,6 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
     "@mui/styled-engine-sc": "^5.0.3",
     "@sandstreamdev/react-swipeable-list": "github:sandstreamdev/react-swipeable-list",

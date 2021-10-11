@@ -6,6 +6,7 @@ import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 const MainContainer = styled.div`
@@ -26,11 +27,17 @@ const Ul = styled.ul`
     padding: 0;
 `
 const Li = styled.li`
+    display: flex;
     background-color: whitesmoke;
     color: #aaa;
     padding: 5px;
     margin: 5px auto;
-    border-radius: 5px;
+    border-radius: 10px;
+    align-items: center;
+`
+const Icon = styled(ExpandMoreIcon)`
+    position: absolute;
+    right: 25px;
 `
 
 export default function ShoppingList() {
@@ -38,9 +45,9 @@ export default function ShoppingList() {
     const name = location.state?.name
 
     const options = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' }
+        { value: 'chocolate', label: 'Chocolate', id: 112, eco_points: 3 },
+        { value: 'strawberry', label: 'Strawberry', id: 113, eco_points: 4 },
+        { value: 'vanilla', label: 'Vanilla', id: 114, eco_points: 5 }
     ]
 
     return (
@@ -119,7 +126,7 @@ const Item = ({ item }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             >
-                <Li> <Checkbox /> {item.label} <FontAwesomeIcon icon={faCoffee} /> </Li>
+                <Li> <Checkbox /> {item.label}  <Icon /> </Li>
             </SwipeableListItem>
         </div>
     )
