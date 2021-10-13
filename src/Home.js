@@ -1,11 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { doSignOut } from "./firebase"
 import { Link, useHistory } from 'react-router-dom'
+import { AuthUserContext } from './App'
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import { DisabledByDefaultRounded } from '@mui/icons-material';
 
 export default function Home(props) {
 
-    const [error, setError] = useState('')
-    const history = useHistory()
+    const [error, setError] = useState('');
+    const [lists, setLists] = useState();
+    const history = useHistory();
+    const authUserId = useContext(AuthUserContext);
+
+    useEffect(() => {
+        //Get all the saved lists from db that belongs to signed in user
+        const db = getDatabase();
+        const dbRef = ref(db, 'users/' + authUserId + '/lists/');
+
+        onValue(dbRef, (snapshot) => {
+            /* snapshot.forEach((childSnapshot) => {
+                const childKey = childSnapshot.key;
+                const childData = childSnapshot.val();
+            }); */
+            setLists(snapshot.val());
+            console.log(snapshot.val())
+        }, {
+            onlyOnce: true
+        });
+        return () => {
+            //cleanup
+        }
+    }, [])
 
 
     async function handleSignOut() {
@@ -24,16 +49,26 @@ export default function Home(props) {
             <h3>Hello home component{props.currentUser}</h3>
             <button onClick={() => handleSignOut()}>Sign out</button>
             <Link to="/create-new-list">Ny list</Link>
-            {/* <CreateList /> */}
+            {/* <ShoppingLists lists={lists} /> */}
         </div>
     )
 }
 
-function CreateList() {
+const ShoppingLists = ({ lists }) => {
     return (
-        <div>
+        <ul>
             <button>Ny lista +</button>
-        </div>
+            {/* {lists?.forEach(list => {
+                <ListItem list={list} />
+            })
+            } */}
+
+            {console.log(lists)}
+        </ul>
 
     );
+}
+
+const ListItem = ({ list }) => {
+    <li>{list}</li>
 }

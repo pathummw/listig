@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Select from 'react-select'
 import styled from 'styled-components'
@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { AuthUserContext } from './App'
+import { Link } from 'react-router-dom'
 
 
 const MainContainer = styled.div`
@@ -46,6 +47,26 @@ export default function ShoppingList() {
     const location = useLocation();
     const listName = location.state?.name;
 
+    const authUserId = useContext(AuthUserContext);
+
+    useEffect(() => {
+        //When user create a new shopping list, save the empty list with the Shopping list name to db
+        console.log(`Shopping List created with the name ${listName}`)
+
+        const db = getDatabase();
+        set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
+            time_stamp: Date.now()
+        })
+            .then(() => {
+                console.log("Created a new Shopping list successfully")
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        return () => {
+            /* cleanup */
+        }
+    }, [])
 
     const options = [
         { value: 'chocolate', label: 'Chocolate', id: 112, green_points: 3 },
@@ -57,38 +78,35 @@ export default function ShoppingList() {
         <MainContainer>
             <h1>Here is your shopping list {listName}</h1>
             {console.log(listName)}
-            <SearchBar options={options} listName={listName} />
+            <Link to="/">
+                <button>Back to home</button>
+            </Link>
+            <SearchBar options={options} listName={listName} authUserId={authUserId} />
 
         </MainContainer>
     )
 }
 
-const SearchBar = ({ options, listName }) => {
+const SearchBar = ({ options, listName, authUserId }) => {
 
-    const authUserId = useContext(AuthUserContext);
+
     const [myshoppingList, setMyShoppingList] = useState([]);
 
-    let shoppingList = [];
+    var itemExist = false;
     const handleChange = (selectedItem) => {
-        /* console.log(selectedItem); */
-        /* shoppingList.push(selectedItem); */
-        /* console.log(shoppingList) */
-        /* setMyShoppingList.push(shoppingList) */
-        /* setMyShoppingList(...myshoppingList, selectedItem) */
-        setMyShoppingList([
-            ...myshoppingList,
-            selectedItem
-        ])
+
 
         //Check temp array: to check if the selected item is alredy exist on the shopping list
-        const itemExist = (myshoppingList.some((item) => {
-            return item.value === selectedItem.value
-        }))
 
-        console.log(itemExist)
-        //1.Save the selected item to the db if the item not exist already
-        if (!itemExist) {
-            console.log("INSIDE ITEM SAVE")
+        if (!myshoppingList.find(i => i.id === selectedItem.id)) {
+
+            setMyShoppingList([
+                ...myshoppingList,
+                selectedItem
+            ]);
+            itemExist = false;
+
+            ////1.Save the selected item to the db if the item not exist already
             const db = getDatabase();
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + selectedItem.value), {
                 id: selectedItem.id,
@@ -101,37 +119,39 @@ const SearchBar = ({ options, listName }) => {
                 .catch((error) => {
                     console.log(error);
                 })
+
         } else {
-            console.log("Item already exist in shopping list")
+            itemExist = true;
+            alert("Item  already exists")
         }
 
 
 
-        /* if (myshoppingList.includes((item) => {
-            item.value === selectedItem.value
-            console.log("Item exists")
-        })) */
 
-        //2. Read the data from db after adding an item
-        /* set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + selectedItem.value) */
-        if (!itemExist) {
+        console.log(myshoppingList)
+        console.log(itemExist)
+
+
+
+
+        function getEntireList() {
             console.log(itemExist)
             const db = getDatabase();
-            const starCountRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
-            onValue(starCountRef, (snapshot) => {
-                const data = snapshot.val();
-                /* updateStarCount(postElement, data); */
-                console.log(data)
+            const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
+
+            onValue(dbRef, (snapshot) => {
+                /* snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                }); */
+                console.log(snapshot.val())
+            }, {
+                onlyOnce: true
             });
         }
 
 
-
     }
-    /* const listItems = myshoppingList.map((item) =>
-        <li>{item}</li>
-    ); */
-    /* console.log(myshoppingList) */
 
     return (
         <>
@@ -149,8 +169,7 @@ const SearchBar = ({ options, listName }) => {
 }
 
 const ShoppingItemsList = ({ myshoppingList }) => {
-    /* console.log(myshoppingList) */
-    console.log("Shopping item fun. call")
+
     return (
         <ShoppingListContainer>
 
@@ -168,7 +187,7 @@ const ShoppingItemsList = ({ myshoppingList }) => {
 }
 
 const Item = ({ item }) => {
-    /* console.log(item); */
+
     return (
         <div>
             <SwipeableListItem
