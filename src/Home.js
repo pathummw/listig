@@ -12,18 +12,38 @@ export default function Home(props) {
     const history = useHistory();
     const authUserId = useContext(AuthUserContext);
 
+    const [listNames, setListNames] = useState([]);
+    const [listData, setListData] = useState([]);
+
     useEffect(() => {
         //Get all the saved lists from db that belongs to signed in user
         const db = getDatabase();
         const dbRef = ref(db, 'users/' + authUserId + '/lists/');
 
+
+        let childKeysArr = [];
+        let childDataArr = [];
+
         onValue(dbRef, (snapshot) => {
-            /* snapshot.forEach((childSnapshot) => {
+            snapshot.forEach((childSnapshot) => {
                 const childKey = childSnapshot.key;
                 const childData = childSnapshot.val();
-            }); */
-            setLists(snapshot.val());
-            console.log(snapshot.val())
+                /* console.log(childKey) */
+                childKeysArr.push(childKey);
+                childDataArr.push(childData);
+                /* childKeys.push(childKey) */
+
+            });
+            setListNames(childKeysArr); //Set the list names 
+            setListData(childDataArr);
+            /* setListData(childData);  */
+            /* setLists(snapshot.val()); */
+            /* console.log(snapshot.val()) */
+
+            /* console.log(listNames) */
+
+
+
         }, {
             onlyOnce: true
         });
@@ -44,31 +64,68 @@ export default function Home(props) {
         }
 
     }
+
     return (
         <div>
             <h3>Hello home component{props.currentUser}</h3>
             <button onClick={() => handleSignOut()}>Sign out</button>
             <Link to="/create-new-list">Ny list</Link>
-            {/* <ShoppingLists lists={lists} /> */}
+            <ShoppingLists listNames={listNames} />
         </div>
     )
 }
 
-const ShoppingLists = ({ lists }) => {
-    return (
-        <ul>
-            <button>Ny lista +</button>
-            {/* {lists?.forEach(list => {
-                <ListItem list={list} />
-            })
-            } */}
+const ShoppingLists = ({ listNames }) => {
 
-            {console.log(lists)}
+    console.log("CALL SHOPPING LIST")
+
+    console.log(listNames)
+
+    /* console.log(lists) */
+
+    /* for (let key in lists) {
+        console.log(key)
+        console.log(lists[key])
+    } */
+
+
+    return (
+
+
+
+        <ul>
+            <button>My shopping lists</button>
+            {listNames.map(listName => (
+                <ListItem listName={listName} />
+            ))}
+
         </ul>
 
     );
 }
 
-const ListItem = ({ list }) => {
-    <li>{list}</li>
+const ListItem = ({ listName }) => {
+
+
+
+    /* for (let key in lists) {
+        console.log(key)
+        console.log(lists[key])
+    } */
+
+    return (
+        <li>{listName}</li>
+    )
+
 }
+
+
+
+/* let teams = [];
+            for (let key of Object.keys(data.teams)) {
+              teams.push({
+                value: data.teams[key].id,
+                label: data.teams[key].name,
+              });
+            }
+            setTeamsArr(teams); */
