@@ -49,6 +49,9 @@ export default function ShoppingList() {
     const listId = location.state?.id;
     const newList = location.state?.new_list;
 
+    let listObjArr = [];
+
+
     const authUserId = useContext(AuthUserContext);
 
 
@@ -72,10 +75,18 @@ export default function ShoppingList() {
                 /* cleanup */
             }
         } else if (!newList) {
+
+
+
             console.log("Befintlig List")
             //If list is alreday created, avoid creating it
             //If so,load the data from db of the already created list
             const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
+
+
+
+
+
 
             onValue(dbRef, (snapshot) => {
                 /* snapshot.forEach((childSnapshot) => {
@@ -83,10 +94,27 @@ export default function ShoppingList() {
                     const childData = childSnapshot.val();
                 }); */
                 console.log(snapshot.val())
+                const openedListItemsObj = snapshot.val();
+
+                let keys = [];
+                let listsArr = [];
+
+
+                for (let key in openedListItemsObj) {
+                    keys.push(key)
+                    listsArr.push(openedListItemsObj[key])
+                    /* console.log(openedListItemsObj[key]) */
+
+                    listObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
+                }
+                console.log(listObjArr)
+
             }, {
                 onlyOnce: true
             });
         }
+
+        /* console.log(openedListItemsObj) */
 
     }, [])
 
@@ -103,22 +131,36 @@ export default function ShoppingList() {
             <Link to="/">
                 <button>Back to home</button>
             </Link>
-            <SearchBar options={options} listName={listName} authUserId={authUserId} />
+            <SearchBar options={options} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
 
         </MainContainer>
     )
 }
 
-const SearchBar = ({ options, listName, authUserId }) => {
+const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
 
     var itemExist = false;
+    console.log(listObjArr)
+    /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
+    useEffect(() => {
+        if (listObjArr) {
+            setMyShoppingList(listObjArr);
+        }
+        return () => {
+            //cleanup
+        }
+    }, [myshoppingList])
+
+    /* ---------------------------------- */
 
     const handleChange = (selectedItem) => {
-        //Check temp array: to check if the selected item is alredy exist on the shopping list
 
+
+
+        //Check temp array: to check if the selected item is alredy exist on the shopping list
         if (!myshoppingList.find(i => i.id === selectedItem.id)) {
 
             setMyShoppingList([
@@ -183,7 +225,7 @@ const SearchBar = ({ options, listName, authUserId }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} />
+            {myshoppingList && <ShoppingItemsList myshoppingList={myshoppingList} />}
 
         </>
     );
@@ -191,17 +233,21 @@ const SearchBar = ({ options, listName, authUserId }) => {
 
 const ShoppingItemsList = ({ myshoppingList }) => {
 
+    { console.log("ShoppingItemsList call") }
+    console.log(myshoppingList)
+
     return (
         <ShoppingListContainer>
 
             <h3>Items list</h3>
-            <SwipeableList>
-                <Ul>
-                    {myshoppingList.map(item => (
-                        <Item item={item} />
-                    ))}
-                </Ul>
-            </SwipeableList>
+            {/* <SwipeableList> */}
+            <Ul>
+                {console.log("Inside UL")}
+                {myshoppingList && myshoppingList.map(item => (
+                    <Item item={item} />
+                ))}
+            </Ul>
+            {/* </SwipeableList> */}
         </ShoppingListContainer>
 
     );
@@ -209,18 +255,22 @@ const ShoppingItemsList = ({ myshoppingList }) => {
 
 const Item = ({ item }) => {
 
+    console.log("Inside ITEM")
+
     return (
         <div>
-            <SwipeableListItem
+            {/* <SwipeableListItem
                 swipeLeft={{
                     action: () => console.info('swipe action triggered')
                 }}
                 swipeRight={{
                     action: () => console.info('swipe action triggered')
                 }}
-            >
-                <Li key={item.id}> <Checkbox /> {item.label}  <Icon /> </Li>
-            </SwipeableListItem>
+            > */}
+            {item && <Li key={item.id}> <Checkbox /> {item.label}  <Icon /> </Li>}
+            <li>Test</li>
+            {console.log(item.label)}
+            {/* </SwipeableListItem> */}
         </div>
     )
 }
