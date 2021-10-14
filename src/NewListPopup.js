@@ -17,7 +17,10 @@ export default function NewListPopup() {
             <Link
                 to={{
                     pathname: "/shopping-list",
-                    state: { name: listName },
+                    state: {
+                        name: listName,
+                        new_list: true
+                    }
                 }}
             >
                 <button>Create</button>

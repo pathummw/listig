@@ -8,7 +8,7 @@ import { DisabledByDefaultRounded } from '@mui/icons-material';
 export default function Home(props) {
 
     const [error, setError] = useState('');
-    const [lists, setLists] = useState();
+    const [lists, setLists] = useState([]);
     const history = useHistory();
     const authUserId = useContext(AuthUserContext);
 
@@ -32,15 +32,16 @@ export default function Home(props) {
                 childKeysArr.push(childKey);
                 childDataArr.push(childData);
                 /* childKeys.push(childKey) */
+                /* console.log(childData) */
 
             });
             setListNames(childKeysArr); //Set the list names 
             setListData(childDataArr);
             /* setListData(childData);  */
-            /* setLists(snapshot.val()); */
+            setLists(snapshot.val());
             /* console.log(snapshot.val()) */
 
-            /* console.log(listNames) */
+            /* console.log(snapshot.val()) */
 
 
 
@@ -70,24 +71,37 @@ export default function Home(props) {
             <h3>Hello home component{props.currentUser}</h3>
             <button onClick={() => handleSignOut()}>Sign out</button>
             <Link to="/create-new-list">Ny list</Link>
-            <ShoppingLists listNames={listNames} />
+            {lists && <ShoppingLists lists={lists} />}
         </div>
     )
 }
 
-const ShoppingLists = ({ listNames }) => {
+const ShoppingLists = ({ lists }) => {
 
     console.log("CALL SHOPPING LIST")
 
-    console.log(listNames)
+    console.log(lists)
 
     /* console.log(lists) */
+    /*  let keys = [];
+     let listsArr = [];
+ 
+     for (let key in lists) {
+         keys.push(key)
+         listsArr.push(lists[key])
+     }
+  */
+    let keys = [];
+    let listsArr = [];
+    let listObjArr = [];
+    for (let key in lists) {
+        keys.push(key)
+        listsArr.push(lists[key])
+        console.log(lists[key].time_stamp)
 
-    /* for (let key in lists) {
-        console.log(key)
-        console.log(lists[key])
-    } */
-
+        listObjArr.push({ name: key, id: lists[key].time_stamp })
+    }
+    console.log(listObjArr)
 
     return (
 
@@ -95,29 +109,53 @@ const ShoppingLists = ({ listNames }) => {
 
         <ul>
             <button>My shopping lists</button>
-            {listNames.map(listName => (
-                <ListItem listName={listName} />
+            {listObjArr?.map(item => (
+                <ListItem item={item} />
             ))}
+
+
+
 
         </ul>
 
     );
 }
 
-const ListItem = ({ listName }) => {
+const ListItem = ({ item, listsArr }) => {
+
+    const handleClick = (e) => {
+        console.log(e)
+    }
 
 
+    /* console.log(listsArr) */
 
     /* for (let key in lists) {
         console.log(key)
         console.log(lists[key])
     } */
+    /* {
+        listName?.map(data => (
+            console.log(data)
+        ))
+    } */
 
     return (
-        <li>{listName}</li>
+        <Link to={{
+            pathname: "/shopping-list",
+            state: {
+                id: item.id,
+                new_list: false,
+                name: item.name
+            }
+        }}>
+            <li key={item.id} onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</li>
+        </Link>
     )
 
 }
+
+
 
 
 

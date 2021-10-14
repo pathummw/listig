@@ -46,26 +46,48 @@ const Icon = styled(ExpandMoreIcon)`
 export default function ShoppingList() {
     const location = useLocation();
     const listName = location.state?.name;
+    const listId = location.state?.id;
+    const newList = location.state?.new_list;
 
     const authUserId = useContext(AuthUserContext);
 
+
     useEffect(() => {
         //When user create a new shopping list, save the empty list with the Shopping list name to db
-        console.log(`Shopping List created with the name ${listName}`)
+
 
         const db = getDatabase();
-        set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
-            time_stamp: Date.now()
-        })
-            .then(() => {
-                console.log("Created a new Shopping list successfully")
+        if (newList) {
+            console.log(`Shopping List created with the name ${listName}`)
+            set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
+                time_stamp: Date.now()
             })
-            .catch((error) => {
-                console.log(error);
-            })
-        return () => {
-            /* cleanup */
+                .then(() => {
+                    console.log("Created a new Shopping list successfully")
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            return () => {
+                /* cleanup */
+            }
+        } else if (!newList) {
+            console.log("Befintlig List")
+            //If list is alreday created, avoid creating it
+            //If so,load the data from db of the already created list
+            const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
+
+            onValue(dbRef, (snapshot) => {
+                /* snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                }); */
+                console.log(snapshot.val())
+            }, {
+                onlyOnce: true
+            });
         }
+
     }, [])
 
     const options = [
@@ -93,9 +115,8 @@ const SearchBar = ({ options, listName, authUserId }) => {
     const [myshoppingList, setMyShoppingList] = useState([]);
 
     var itemExist = false;
+
     const handleChange = (selectedItem) => {
-
-
         //Check temp array: to check if the selected item is alredy exist on the shopping list
 
         if (!myshoppingList.find(i => i.id === selectedItem.id)) {
@@ -105,7 +126,7 @@ const SearchBar = ({ options, listName, authUserId }) => {
                 selectedItem
             ]);
             itemExist = false;
-
+            console.log(myshoppingList)
             ////1.Save the selected item to the db if the item not exist already
             const db = getDatabase();
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + selectedItem.value), {
@@ -198,7 +219,7 @@ const Item = ({ item }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             >
-                <Li> <Checkbox /> {item.label}  <Icon /> </Li>
+                <Li key={item.id}> <Checkbox /> {item.label}  <Icon /> </Li>
             </SwipeableListItem>
         </div>
     )
