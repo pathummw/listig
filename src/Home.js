@@ -84,9 +84,9 @@ export default function Home(props) {
 
 const ShoppingLists = ({ lists }) => {
 
-    console.log("CALL SHOPPING LIST")
+    /* console.log("CALL SHOPPING LIST") */
 
-    console.log(lists)
+    /* console.log(lists) */
 
     /* console.log(lists) */
     /*  let keys = [];
@@ -103,11 +103,11 @@ const ShoppingLists = ({ lists }) => {
     for (let key in lists) {
         keys.push(key)
         listsArr.push(lists[key])
-        console.log(lists[key].time_stamp)
+        /* console.log(lists[key].time_stamp) */
 
         listObjArr.push({ name: key, id: lists[key].time_stamp })
     }
-    console.log(listObjArr)
+    /* console.log(listObjArr) */
 
     return (
 
@@ -130,7 +130,7 @@ const ShoppingLists = ({ lists }) => {
 const ListItem = ({ item, listsArr }) => {
 
     const handleClick = (e) => {
-        console.log(e)
+        /* console.log(e) */
     }
 
 
@@ -147,14 +147,15 @@ const ListItem = ({ item, listsArr }) => {
     } */
 
     return (
-        <Link to={{
+        <Link key={item.id} to={{
             pathname: "/shopping-list",
             state: {
                 id: item.id,
                 new_list: false,
                 name: item.name
             }
-        }}>
+        }}
+        >
             <li onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</li>
         </Link>
     )
