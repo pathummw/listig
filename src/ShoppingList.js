@@ -49,18 +49,22 @@ export default function ShoppingList() {
     const listId = location.state?.id;
     const newList = location.state?.new_list;
 
-    let listObjArr = [];
+    /* let listObjArr = []; */
 
 
     const authUserId = useContext(AuthUserContext);
 
+    const [listObjArr, setListObjectArr] = useState([]);
+
 
     useEffect(() => {
+
+        let isSubscribed = true;
+
         //When user create a new shopping list, save the empty list with the Shopping list name to db
 
-
         const db = getDatabase();
-        if (newList) {
+        if (newList && isSubscribed) {
             console.log(`Shopping List created with the name ${listName}`)
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
                 time_stamp: Date.now()
@@ -71,10 +75,9 @@ export default function ShoppingList() {
                 .catch((error) => {
                     console.log(error);
                 })
-            return () => {
-                /* cleanup */
-            }
-        } else if (!newList) {
+            /* return () => {
+            } */
+        } else if (!newList && isSubscribed) {
 
 
 
@@ -98,16 +101,20 @@ export default function ShoppingList() {
 
                 let keys = [];
                 let listsArr = [];
-
+                let templistObjArr = [];
 
                 for (let key in openedListItemsObj) {
                     keys.push(key)
                     listsArr.push(openedListItemsObj[key])
                     /* console.log(openedListItemsObj[key]) */
 
-                    listObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
+                    templistObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
                 }
-                console.log(listObjArr)
+                console.log(templistObjArr)
+
+                if (isSubscribed) {
+                    setListObjectArr(...templistObjArr);
+                }
 
             }, {
                 onlyOnce: true
@@ -115,6 +122,9 @@ export default function ShoppingList() {
         }
 
         /* console.log(openedListItemsObj) */
+        return () => {
+            isSubscribed = false;
+        }
 
     }, [])
 
@@ -146,14 +156,22 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
     console.log(listObjArr)
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
     useEffect(() => {
-        if (listObjArr) {
-            setMyShoppingList(listObjArr);
+
+        let isSubscribed = true;
+        if (listObjArr && isSubscribed) {
+
+            setMyShoppingList(
+                ...myshoppingList,
+                listObjArr
+            );
+
         }
         return () => {
-            //cleanup
+            isSubscribed = false;
         }
-    }, [myshoppingList])
+    }, [])
 
+    console.log(myshoppingList)
     /* ---------------------------------- */
 
     const handleChange = (selectedItem) => {
@@ -243,7 +261,7 @@ const ShoppingItemsList = ({ myshoppingList }) => {
             {/* <SwipeableList> */}
             <Ul>
                 {console.log("Inside UL")}
-                {myshoppingList.map(item => (
+                {myshoppingList && myshoppingList.map(item => (
                     <Item key={item.id} item={item} />
                 ))}
             </Ul>

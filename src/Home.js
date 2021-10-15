@@ -16,6 +16,8 @@ export default function Home(props) {
     const [listData, setListData] = useState([]);
 
     useEffect(() => {
+
+        let isSubscribed = true;
         //Get all the saved lists from db that belongs to signed in user
         const db = getDatabase();
         const dbRef = ref(db, 'users/' + authUserId + '/lists/');
@@ -35,13 +37,17 @@ export default function Home(props) {
                 /* console.log(childData) */
 
             });
-            setListNames(childKeysArr); //Set the list names 
-            setListData(childDataArr);
-            /* setListData(childData);  */
-            setLists(snapshot.val());
-            /* console.log(snapshot.val()) */
 
-            /* console.log(snapshot.val()) */
+            if (isSubscribed) {
+                setListNames(childKeysArr); //Set the list names 
+                setListData(childDataArr);
+                /* setListData(childData);  */
+                setLists(snapshot.val());
+                /* console.log(snapshot.val()) */
+
+                /* console.log(snapshot.val()) */
+            }
+
 
 
 
@@ -49,7 +55,7 @@ export default function Home(props) {
             onlyOnce: true
         });
         return () => {
-            //cleanup
+            isSubscribed = false;
         }
     }, [])
 
@@ -110,7 +116,7 @@ const ShoppingLists = ({ lists }) => {
         <ul>
             <button>My shopping lists</button>
             {listObjArr?.map(item => (
-                <ListItem item={item} />
+                <ListItem key={item.id} item={item} />
             ))}
 
 
@@ -149,7 +155,7 @@ const ListItem = ({ item, listsArr }) => {
                 name: item.name
             }
         }}>
-            <li key={item.id} onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</li>
+            <li onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</li>
         </Link>
     )
 
