@@ -45,8 +45,9 @@ const Icon = styled(ExpandMoreIcon)`
 
 export default function ShoppingList() {
     const location = useLocation();
-    const listName = location.state?.name;
-    const listId = location.state?.id;
+    /* const [listName, setListName] = useState(null); */
+    const listName = location.state?.name
+    const [listId, setListId] = useState(null);
     const newList = location.state?.new_list;
 
     /* let listObjArr = []; */
@@ -60,6 +61,11 @@ export default function ShoppingList() {
     useEffect(() => {
 
         let isSubscribed = true;
+
+        /* setListName(location.state?.name) */
+        setListId(location.state?.id)
+
+        console.log(listName)
 
         //When user create a new shopping list, save the empty list with the Shopping list name to db
 
@@ -85,16 +91,17 @@ export default function ShoppingList() {
             //If list is alreday created, avoid creating it
             //If so,load the data from db of the already created list
             const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
+            /* const dbRef = ref(db, 'users/' + authUserId + '/lists/' + '555'); */
 
 
-
-
-
+            console.log(listName)
 
             onValue(dbRef, (snapshot) => {
                 /* snapshot.forEach((childSnapshot) => {
                     const childKey = childSnapshot.key;
                     const childData = childSnapshot.val();
+                    console.log(childKey)
+                    console.log(childData)
                 }); */
                 console.log(snapshot.val())
                 const openedListItemsObj = snapshot.val();
@@ -113,7 +120,7 @@ export default function ShoppingList() {
                 console.log(templistObjArr)
 
                 if (isSubscribed) {
-                    setListObjectArr(...templistObjArr);
+                    setListObjectArr(templistObjArr);
                 }
 
             }, {
@@ -137,7 +144,6 @@ export default function ShoppingList() {
     return (
         <MainContainer>
             <h1>Here is your shopping list {listName}</h1>
-            {console.log(listName)}
             <Link to="/">
                 <button>Back to home</button>
             </Link>
@@ -151,25 +157,29 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
+    const [changed, setChanged] = useState(false);
 
     var itemExist = false;
     console.log(listObjArr)
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
     useEffect(() => {
 
-        let isSubscribed = true;
-        if (listObjArr && isSubscribed) {
 
+        let isSubscribed = true;
+        if (listObjArr) {
+            console.log("Inside setMyShoppingList")
             setMyShoppingList(
                 ...myshoppingList,
                 listObjArr
             );
 
+            setChanged(true);
+
         }
         return () => {
             isSubscribed = false;
         }
-    }, [])
+    }, [listObjArr])
 
     console.log(myshoppingList)
     /* ---------------------------------- */
@@ -243,16 +253,22 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} />
+            <ShoppingItemsList myshoppingList={myshoppingList} listName={listName} />
 
         </>
     );
 }
 
-const ShoppingItemsList = ({ myshoppingList }) => {
+const ShoppingItemsList = ({ myshoppingList, listName }) => {
 
     { console.log("ShoppingItemsList call") }
     console.log(myshoppingList)
+    useEffect(() => {
+        console.log("Hello from use effect")
+        return () => {
+            /* cleanup */
+        }
+    }, [listName])
 
     return (
         <ShoppingListContainer>
@@ -260,10 +276,15 @@ const ShoppingItemsList = ({ myshoppingList }) => {
             <h3>Items list</h3>
             {/* <SwipeableList> */}
             <Ul>
-                {console.log("Inside UL")}
-                {myshoppingList && myshoppingList.map(item => (
-                    <Item key={item.id} item={item} />
+                {console.log("Inside UL..")}
+                {console.log(myshoppingList)}
+                {myshoppingList && myshoppingList?.map(item => (
+
+                    <Item key={item.id} item={item} listName={listName} />
+
                 ))}
+
+
             </Ul>
             {/* </SwipeableList> */}
         </ShoppingListContainer>
@@ -271,7 +292,16 @@ const ShoppingItemsList = ({ myshoppingList }) => {
     );
 }
 
-const Item = ({ item }) => {
+const Item = ({ item, listName }) => {
+
+    const [listNameNew, setListName] = useState(null);
+
+    useEffect(() => {
+        setListName(listName)
+        return () => {
+            //cleanup
+        }
+    }, [listName])
 
 
     console.log("Inside ITEM")
@@ -292,3 +322,7 @@ const Item = ({ item }) => {
         </div>
     )
 }
+
+
+//Home eken link eka click kalata ShoppingList eka rerender wenne nee,,, mokak hari ShoppingList con.log ekak wenas karala save kalahama re-render wenawa,
+//Link eka click kalama state ekak wenas karala re-render ???
