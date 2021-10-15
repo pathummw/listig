@@ -225,7 +225,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            {myshoppingList && <ShoppingItemsList myshoppingList={myshoppingList} />}
+            <ShoppingItemsList myshoppingList={myshoppingList} />
 
         </>
     );
@@ -243,8 +243,8 @@ const ShoppingItemsList = ({ myshoppingList }) => {
             {/* <SwipeableList> */}
             <Ul>
                 {console.log("Inside UL")}
-                {myshoppingList && myshoppingList.map(item => (
-                    <Item item={item} />
+                {myshoppingList.map(item => (
+                    <Item key={item.id} item={item} />
                 ))}
             </Ul>
             {/* </SwipeableList> */}
@@ -254,6 +254,7 @@ const ShoppingItemsList = ({ myshoppingList }) => {
 }
 
 const Item = ({ item }) => {
+
 
     console.log("Inside ITEM")
 
@@ -267,9 +268,8 @@ const Item = ({ item }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            {item && <Li key={item.id}> <Checkbox /> {item.label}  <Icon /> </Li>}
-            <li>Test</li>
-            {console.log(item.label)}
+            <Li> <Checkbox /> {item.label}  <Icon /> </Li>
+
             {/* </SwipeableListItem> */}
         </div>
     )
