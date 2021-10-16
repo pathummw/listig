@@ -77,14 +77,9 @@ export default function ShoppingList() {
             }
         } else if (!newList && isMounted) {
 
-
-
-            console.log("Befintlig List")
             //If list is alreday created, avoid creating it
             //If so,load the data from db of the already created list
             const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
-            /* const dbRef = ref(db, 'users/' + authUserId + '/lists/' + '555'); */
-
 
             onValue(dbRef, (snapshot) => {
                 /* snapshot.forEach((childSnapshot) => {
@@ -100,9 +95,12 @@ export default function ShoppingList() {
                 let templistObjArr = [];
 
                 for (let key in openedListItemsObj) {
-                    keys.push(key)
-                    listsArr.push(openedListItemsObj[key])
-                    templistObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
+                    if (key !== 'time_stamp') {  //Avoid adding time_stamp to the list of items
+                        keys.push(key)
+                        listsArr.push(openedListItemsObj[key])
+                        templistObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
+                    }
+
                 }
 
 
