@@ -58,11 +58,11 @@ export default function ShoppingList() {
 
     useEffect(() => {
 
-        let isSubscribed = true;
+        let isMounted = true;
         //When user create a new shopping list, save the empty list with the Shopping list name to db
 
         const db = getDatabase();
-        if (newList && isSubscribed) {
+        if (newList && isMounted) {
             console.log(`Shopping List created with the name ${listName}`)
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
                 time_stamp: Date.now()
@@ -73,9 +73,9 @@ export default function ShoppingList() {
                 .catch((error) => {
                     console.log(error);
                 })
-            /* return () => {
-            } */
-        } else if (!newList && isSubscribed) {
+            return () => {
+            }
+        } else if (!newList && isMounted) {
 
 
 
@@ -106,7 +106,7 @@ export default function ShoppingList() {
                 }
 
 
-                if (isSubscribed) {
+                if (isMounted) {
                     setListObjectArr(templistObjArr);
                 }
 
@@ -117,7 +117,7 @@ export default function ShoppingList() {
 
         /* console.log(openedListItemsObj) */
         return () => {
-            isSubscribed = false;
+            isMounted = false;
         }
 
     }, [])
@@ -150,8 +150,8 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
     useEffect(() => {
 
 
-        let isSubscribed = true;
-        if (listObjArr) {
+        let isMounted = true;
+        if (isMounted && listObjArr) {
             setMyShoppingList(
                 ...myshoppingList,
                 listObjArr
@@ -159,7 +159,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
         }
         return () => {
-            isSubscribed = false;
+            isMounted = false;
         }
     }, [listObjArr])
 

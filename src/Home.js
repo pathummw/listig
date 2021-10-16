@@ -17,7 +17,7 @@ export default function Home(props) {
 
     useEffect(() => {
 
-        let isSubscribed = true;
+        let isMounted = true;
         //Get all the saved lists from db that belongs to signed in user
         const db = getDatabase();
         const dbRef = ref(db, 'users/' + authUserId + '/lists/');
@@ -38,7 +38,7 @@ export default function Home(props) {
 
             });
 
-            if (isSubscribed) {
+            if (isMounted) {
                 setListNames(childKeysArr); //Set the list names 
                 setListData(childDataArr);
                 /* setListData(childData);  */
@@ -55,7 +55,7 @@ export default function Home(props) {
             onlyOnce: true
         });
         return () => {
-            isSubscribed = false;
+            isMounted = false;
         }
     }, [])
 
