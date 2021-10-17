@@ -14,8 +14,11 @@ export default function Home(props) {
 
     const [listNames, setListNames] = useState([]);
     const [listData, setListData] = useState([]);
+    const [loading, setLLoading] = useState(false);
 
     useEffect(() => {
+
+        setLLoading(true);
 
         let isMounted = true;
         //Get all the saved lists from db that belongs to signed in user
@@ -49,7 +52,7 @@ export default function Home(props) {
             }
 
 
-
+            setLLoading(false);
 
         }, {
             onlyOnce: true
@@ -77,6 +80,9 @@ export default function Home(props) {
             <h3>Hello home component{props.currentUser}</h3>
             <button onClick={() => handleSignOut()}>Sign out</button>
             <Link to="/create-new-list">Ny list</Link>
+
+            {loading && <div>Loading ...</div>}
+
             {lists && <ShoppingLists lists={lists} />}
         </div>
     )
