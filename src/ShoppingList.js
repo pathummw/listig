@@ -45,12 +45,10 @@ const Icon = styled(ExpandMoreIcon)`
 
 export default function ShoppingList() {
     const location = useLocation();
-    /* const [listName, setListName] = useState(null); */
-    const listName = location.state?.name
-    const [listId, setListId] = useState(null);
+    const listName = location.state?.name;
+    const listId = location.state?.id;
     const newList = location.state?.new_list;
 
-    /* let listObjArr = []; */
 
 
     const authUserId = useContext(AuthUserContext);
@@ -60,17 +58,11 @@ export default function ShoppingList() {
 
     useEffect(() => {
 
-        let isSubscribed = true;
-
-        /* setListName(location.state?.name) */
-        setListId(location.state?.id)
-
-        console.log(listName)
-
+        let isMounted = true;
         //When user create a new shopping list, save the empty list with the Shopping list name to db
 
         const db = getDatabase();
-        if (newList && isSubscribed) {
+        if (newList && isMounted) {
             console.log(`Shopping List created with the name ${listName}`)
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
                 time_stamp: Date.now()
@@ -81,20 +73,13 @@ export default function ShoppingList() {
                 .catch((error) => {
                     console.log(error);
                 })
-            /* return () => {
-            } */
-        } else if (!newList && isSubscribed) {
+            return () => {
+            }
+        } else if (!newList && isMounted) {
 
-
-
-            console.log("Befintlig List")
             //If list is alreday created, avoid creating it
             //If so,load the data from db of the already created list
             const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
-            /* const dbRef = ref(db, 'users/' + authUserId + '/lists/' + '555'); */
-
-
-            console.log(listName)
 
             onValue(dbRef, (snapshot) => {
                 /* snapshot.forEach((childSnapshot) => {
@@ -103,7 +88,6 @@ export default function ShoppingList() {
                     console.log(childKey)
                     console.log(childData)
                 }); */
-                console.log(snapshot.val())
                 const openedListItemsObj = snapshot.val();
 
                 let keys = [];
@@ -111,15 +95,16 @@ export default function ShoppingList() {
                 let templistObjArr = [];
 
                 for (let key in openedListItemsObj) {
-                    keys.push(key)
-                    listsArr.push(openedListItemsObj[key])
-                    /* console.log(openedListItemsObj[key]) */
+                    if (key !== 'time_stamp') {  //Avoid adding time_stamp to the list of items
+                        keys.push(key)
+                        listsArr.push(openedListItemsObj[key])
+                        templistObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
+                    }
 
-                    templistObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
                 }
-                console.log(templistObjArr)
 
-                if (isSubscribed) {
+
+                if (isMounted) {
                     setListObjectArr(templistObjArr);
                 }
 
@@ -130,7 +115,7 @@ export default function ShoppingList() {
 
         /* console.log(openedListItemsObj) */
         return () => {
-            isSubscribed = false;
+            isMounted = false;
         }
 
     }, [])
@@ -157,35 +142,28 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
-    const [changed, setChanged] = useState(false);
 
     var itemExist = false;
-    console.log(listObjArr)
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
     useEffect(() => {
 
 
-        let isSubscribed = true;
-        if (listObjArr) {
-            console.log("Inside setMyShoppingList")
+        let isMounted = true;
+        if (isMounted && listObjArr) {
             setMyShoppingList(
                 ...myshoppingList,
                 listObjArr
             );
 
-            setChanged(true);
-
         }
         return () => {
-            isSubscribed = false;
+            isMounted = false;
         }
     }, [listObjArr])
 
-    console.log(myshoppingList)
     /* ---------------------------------- */
 
     const handleChange = (selectedItem) => {
-
 
 
         //Check temp array: to check if the selected item is alredy exist on the shopping list
@@ -218,30 +196,6 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
 
-
-        console.log(myshoppingList)
-        console.log(itemExist)
-
-
-
-
-        function getEntireList() {
-            console.log(itemExist)
-            const db = getDatabase();
-            const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
-
-            onValue(dbRef, (snapshot) => {
-                /* snapshot.forEach((childSnapshot) => {
-                    const childKey = childSnapshot.key;
-                    const childData = childSnapshot.val();
-                }); */
-                console.log(snapshot.val())
-            }, {
-                onlyOnce: true
-            });
-        }
-
-
     }
 
     return (
@@ -253,22 +207,14 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} listName={listName} />
+            <ShoppingItemsList myshoppingList={myshoppingList} />
 
         </>
     );
 }
 
-const ShoppingItemsList = ({ myshoppingList, listName }) => {
+const ShoppingItemsList = ({ myshoppingList }) => {
 
-    { console.log("ShoppingItemsList call") }
-    console.log(myshoppingList)
-    useEffect(() => {
-        console.log("Hello from use effect")
-        return () => {
-            /* cleanup */
-        }
-    }, [listName])
 
     return (
         <ShoppingListContainer>
@@ -276,11 +222,9 @@ const ShoppingItemsList = ({ myshoppingList, listName }) => {
             <h3>Items list</h3>
             {/* <SwipeableList> */}
             <Ul>
-                {console.log("Inside UL..")}
-                {console.log(myshoppingList)}
                 {myshoppingList && myshoppingList?.map(item => (
 
-                    <Item key={item.id} item={item} listName={listName} />
+                    <Item key={item.id} item={item} />
 
                 ))}
 
@@ -292,19 +236,8 @@ const ShoppingItemsList = ({ myshoppingList, listName }) => {
     );
 }
 
-const Item = ({ item, listName }) => {
+const Item = ({ item }) => {
 
-    const [listNameNew, setListName] = useState(null);
-
-    useEffect(() => {
-        setListName(listName)
-        return () => {
-            //cleanup
-        }
-    }, [listName])
-
-
-    console.log("Inside ITEM")
 
     return (
         <div>
