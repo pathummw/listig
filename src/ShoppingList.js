@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set, onValue, update } from "firebase/database";
 import { AuthUserContext } from './App'
 import { Link } from 'react-router-dom'
 
@@ -207,13 +207,13 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} />
+            <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} />
 
         </>
     );
 }
 
-const ShoppingItemsList = ({ myshoppingList }) => {
+const ShoppingItemsList = ({ myshoppingList, authUserId, listName }) => {
 
 
     return (
@@ -224,7 +224,7 @@ const ShoppingItemsList = ({ myshoppingList }) => {
             <Ul>
                 {myshoppingList && myshoppingList?.map(item => (
 
-                    <Item key={item.id} item={item} />
+                    <Item key={item.id} item={item} authUserId={authUserId} listName={listName} />
 
                 ))}
 
@@ -236,8 +236,29 @@ const ShoppingItemsList = ({ myshoppingList }) => {
     );
 }
 
-const Item = ({ item }) => {
+const Item = ({ item, authUserId, listName }) => {
 
+    console.log(item)
+    const handleChangeCheckbox = (e) => {
+        console.log(e.target.checked)
+        editListItem(e.target.checked)
+    }
+
+    const editListItem = (isSelected) => {
+        const db = getDatabase();
+
+        update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+            isSelected: isSelected
+        })
+            .then(() => {
+                console.log("Item updated successfully")
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        return () => {
+        }
+    }
 
     return (
         <div>
@@ -249,7 +270,7 @@ const Item = ({ item }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li> <Checkbox /> {item.label}  <Icon /> </Li>
+            <Li> <Checkbox onChange={handleChangeCheckbox} /> {item.label}  <Icon /> </Li>
 
             {/* </SwipeableListItem> */}
         </div>

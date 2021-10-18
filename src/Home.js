@@ -120,7 +120,7 @@ const ShoppingLists = ({ lists }) => {
 
 
         <ul>
-            <button>My shopping lists</button>
+
             {listObjArr?.map(item => (
                 <ListItem key={item.id} item={item} />
             ))}
