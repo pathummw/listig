@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Select from 'react-select'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -29,13 +29,30 @@ const Ul = styled.ul`
     list-style-type: none;
     padding: 0;
 `
+
+const glowing = keyframes`
+ 0% { box-shadow: 0 0 8px 1px #f3453e}
+ 50% { box-shadow: 0 0 8px 5px #f3453e}
+ 100% { box-shadow: 0 0 8px 1px #f3453e}
+`
+const anm = keyframes`
+ /* 0% { box-shadow: 0 0 8px 1px #3ef379}
+ 50% { box-shadow: 0 0 15px 10px #3ef379}
+ 100% { box-shadow: 0 0 8px 1px #3ef379} */
+`
 const Li = styled.li`
     display: flex;
     background-color: whitesmoke;
     color: #aaa;
     padding: 5px;
-    margin: 5px auto;
+    margin: 7px auto;
     border-radius: 10px;
+    /* box-shadow: ${props => props.green_points < 3 ? '0 0 8px 1px #f3453e' : 'none'}; */
+    animation: ${props => props.green_points < 3 ? 'glowing 1300ms infinite' : 'none'} ;
+    animation-name: ${props => props.green_points < 3 ? glowing : anm};
+ animation-duration: 1s;
+ animation-iteration-count: infinite;
+    /* box-shadow: 0 0 32px 3.5px #f3453e; */
     align-items: center;
     text-decoration: ${props => props.checked ? 'line-through' : 'none'};
     ${props => {
@@ -144,7 +161,8 @@ export default function ShoppingList() {
     const options = [
         { value: 'chocolate', label: 'Chocolate', id: 112, green_points: 3 },
         { value: 'strawberry', label: 'Strawberry', id: 113, green_points: 4 },
-        { value: 'vanilla', label: 'Vanilla', id: 114, green_points: 5 }
+        { value: 'vanilla', label: 'Vanilla', id: 114, green_points: 5 },
+        { value: 'nötfärs', label: 'Nötfärs', id: 115, green_points: 1 }
     ]
 
     return (
@@ -261,10 +279,12 @@ const Item = ({ item, authUserId, listName }) => {
 
     const [expand, setExpand] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [greenPoints, setGreenPoints] = useState(null);
 
     useEffect(() => {
         if (item) {
             setChecked(item.isSelected);
+            setGreenPoints(item.green_points);
         }
         return () => {
             //cleanup
@@ -309,7 +329,7 @@ const Item = ({ item, authUserId, listName }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li expand={expand} checked={checked}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label}  <Icon onClick={handleOnClickExpand} /> </Li>
+            <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label}  <Icon onClick={handleOnClickExpand} /> </Li>
 
             {/* </SwipeableListItem> */}
         </div>
