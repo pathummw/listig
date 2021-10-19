@@ -116,7 +116,10 @@ export default function ShoppingList() {
                     if (key !== 'time_stamp') {  //Avoid adding time_stamp to the list of items
                         keys.push(key)
                         listsArr.push(openedListItemsObj[key])
-                        templistObjArr.push({ value: key, label: key, id: openedListItemsObj[key].id, green_points: openedListItemsObj[key].green_points })
+                        templistObjArr.push({
+                            value: key, label: key, id: openedListItemsObj[key].id,
+                            green_points: openedListItemsObj[key].green_points, isSelected: openedListItemsObj[key].isSelected
+                        })
                     }
 
                 }
@@ -259,14 +262,23 @@ const Item = ({ item, authUserId, listName }) => {
     const [expand, setExpand] = useState(false);
     const [checked, setChecked] = useState(false);
 
+    useEffect(() => {
+        if (item) {
+            setChecked(item.isSelected);
+        }
+        return () => {
+            //cleanup
+        }
+    }, [])
+
+
+
+
     const handleOnClickExpand = () => {
-        console.log("Clicked expand")
         setExpand(!expand);
     }
 
     const handleChangeCheckbox = (e) => {
-
-        console.log(checked)
         setChecked(e.target.checked);
         updateListItem(e.target.checked);
     }
@@ -297,7 +309,7 @@ const Item = ({ item, authUserId, listName }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li expand={expand} checked={checked}> <Checkbox onChange={handleChangeCheckbox} /> {item.label}  <Icon onClick={handleOnClickExpand} /> </Li>
+            <Li expand={expand} checked={checked}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label}  <Icon onClick={handleOnClickExpand} /> </Li>
 
             {/* </SwipeableListItem> */}
         </div>
