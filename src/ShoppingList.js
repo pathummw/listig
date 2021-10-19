@@ -37,6 +37,7 @@ const Li = styled.li`
     margin: 5px auto;
     border-radius: 10px;
     align-items: center;
+    text-decoration: ${props => props.checked ? 'line-through' : 'none'};
     ${props => {
         if (props.expand) {
             return `
@@ -46,17 +47,7 @@ const Li = styled.li`
             `;
         } else if (!props.expand) {
             return `
-            background-color: red;
-            `;
-        } else if (props.checked) {
-            return `
-            color: yellow;
-            background-color: yellow;
-            `;
-        } else if (!props.checked) {
-            return `
-            color: brown;
-            background-color: blue;
+            /* background-color: red; */
             `;
         }
     }
