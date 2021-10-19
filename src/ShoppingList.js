@@ -37,10 +37,37 @@ const Li = styled.li`
     margin: 5px auto;
     border-radius: 10px;
     align-items: center;
+    ${props => {
+        if (props.expand) {
+            return `
+            background-color: green;
+            height: 100px;
+            transition: 1s;
+            `;
+        } else if (!props.expand) {
+            return `
+            background-color: red;
+            `;
+        } else if (props.checked) {
+            return `
+            color: yellow;
+            background-color: yellow;
+            `;
+        } else if (!props.checked) {
+            return `
+            color: brown;
+            background-color: blue;
+            `;
+        }
+    }
+
+    }
+
+    
 `
 const Icon = styled(ExpandMoreIcon)`
-    position: absolute;
-    right: 25px;
+position: absolute;
+right: 25px;
 `
 
 export default function ShoppingList() {
@@ -63,7 +90,7 @@ export default function ShoppingList() {
 
         const db = getDatabase();
         if (newList && isMounted) {
-            console.log(`Shopping List created with the name ${listName}`)
+            console.log(`Shopping List created with the name ${listName} `)
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
                 time_stamp: Date.now()
             })
@@ -238,13 +265,22 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName }) => {
 
 const Item = ({ item, authUserId, listName }) => {
 
-    console.log(item)
-    const handleChangeCheckbox = (e) => {
-        console.log(e.target.checked)
-        editListItem(e.target.checked)
+    const [expand, setExpand] = useState(false);
+    const [checked, setChecked] = useState(false);
+
+    const handleOnClickExpand = () => {
+        console.log("Clicked expand")
+        setExpand(!expand);
     }
 
-    const editListItem = (isSelected) => {
+    const handleChangeCheckbox = (e) => {
+
+        console.log(checked)
+        setChecked(e.target.checked);
+        updateListItem(e.target.checked);
+    }
+
+    const updateListItem = (isSelected) => {
         const db = getDatabase();
 
         update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
@@ -270,7 +306,7 @@ const Item = ({ item, authUserId, listName }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li> <Checkbox onChange={handleChangeCheckbox} /> {item.label}  <Icon /> </Li>
+            <Li expand={expand} checked={checked}> <Checkbox onChange={handleChangeCheckbox} /> {item.label}  <Icon onClick={handleOnClickExpand} /> </Li>
 
             {/* </SwipeableListItem> */}
         </div>
