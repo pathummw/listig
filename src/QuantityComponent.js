@@ -2,10 +2,35 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
+    display: flex;
+    padding: none;
+`
+const Component = styled.div`
     input{
         width: 30px;
+        height: 18px;
         text-align: center;
+        border: none;
+        padding: none;
+
     }
+    & > button{ 
+        background-color: #008B52;
+        cursor: pointer;
+        border: none;
+        text-align: center;
+        padding: 0;
+        height: 20px;
+        width: 20px;
+    }
+    
+`
+
+const ButtonMinus = styled.button`
+    border-radius: 3px 0 0 3px;
+`
+const ButtonPlus = styled.button`
+    border-radius: 0 3px 3px 0;
 `
 
 export default function QuantityComponent() {
@@ -30,9 +55,14 @@ export default function QuantityComponent() {
 
     return (
         <Container>
-            <button onClick={handleMinus}>-</button>
-            <input type="text" value={number} />
-            <button onClick={handlePlus}>+</button>
+            <Component>
+                <ButtonMinus onClick={handleMinus}>-</ButtonMinus>
+                <input type="text" value={number} />
+                <ButtonPlus onClick={handlePlus}>+</ButtonPlus>
+            </Component>
+
+
+
             <span>{quantityType}</span>
         </Container>
     )
