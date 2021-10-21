@@ -51,8 +51,8 @@ const Li = styled.li`
     /* box-shadow: ${props => props.green_points < 3 ? '0 0 8px 1px #f3453e' : 'none'}; */
     animation: ${props => props.green_points < 3 ? 'glowing 1300ms infinite' : 'none'} ;
     animation-name: ${props => props.green_points < 3 ? glowing : anm};
- animation-duration: 1s;
- animation-iteration-count: infinite;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
     /* box-shadow: 0 0 32px 3.5px #f3453e; */
     align-items: center;
     text-decoration: ${props => props.checked ? 'line-through' : 'none'};
@@ -71,13 +71,20 @@ const Li = styled.li`
     }
 
     }
-
-    
+  
 `
+
+const QuantityContainerSpan = styled.span`
+        position: absolute;
+        right: 75px;
+`
+
 const Icon = styled(ExpandMoreIcon)`
 position: absolute;
 right: 25px;
 `
+
+
 
 export default function ShoppingList() {
     const location = useLocation();
@@ -214,7 +221,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 selectedItem
             ]);
             itemExist = false;
-            console.log(myshoppingList)
+            /* console.log(myshoppingList) */
             ////1.Save the selected item to the db if the item not exist already
             const db = getDatabase();
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + selectedItem.value), {
@@ -330,7 +337,9 @@ const Item = ({ item, authUserId, listName }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <QuantityComponent />  <Icon onClick={handleOnClickExpand} /> </Li>
+            <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
+                <QuantityContainerSpan><QuantityComponent /></QuantityContainerSpan>
+            </Li>
 
 
             {/* </SwipeableListItem> */}

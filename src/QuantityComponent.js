@@ -2,7 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
-    display: flex;
+    /* display: flex; */
+    
+    input{
+        width: 30px;
+    }
 `
 
 export default function QuantityComponent() {
