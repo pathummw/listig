@@ -33,22 +33,15 @@ export default function Home(props) {
             snapshot.forEach((childSnapshot) => {
                 const childKey = childSnapshot.key;
                 const childData = childSnapshot.val();
-                /* console.log(childKey) */
                 childKeysArr.push(childKey);
                 childDataArr.push(childData);
-                /* childKeys.push(childKey) */
-                /* console.log(childData) */
 
             });
 
             if (isMounted) {
                 setListNames(childKeysArr); //Set the list names 
                 setListData(childDataArr);
-                /* setListData(childData);  */
                 setLists(snapshot.val());
-                /* console.log(snapshot.val()) */
-
-                /* console.log(snapshot.val()) */
             }
 
 
@@ -90,43 +83,24 @@ export default function Home(props) {
 
 const ShoppingLists = ({ lists }) => {
 
-    /* console.log("CALL SHOPPING LIST") */
 
-    /* console.log(lists) */
-
-    /* console.log(lists) */
-    /*  let keys = [];
-     let listsArr = [];
- 
-     for (let key in lists) {
-         keys.push(key)
-         listsArr.push(lists[key])
-     }
-  */
     let keys = [];
     let listsArr = [];
     let listObjArr = [];
-    for (let key in lists) {
-        keys.push(key)
-        listsArr.push(lists[key])
-        /* console.log(lists[key].time_stamp) */
 
+    for (let key in lists) {
+        keys.push(key)   //key = Shopping list name ex."Handla okt 12"
+        listsArr.push(lists[key]) //individual items that "Handla okt 12" shopping list has
         listObjArr.push({ name: key, id: lists[key].time_stamp })
     }
-    /* console.log(listObjArr) */
 
     return (
-
-
 
         <ul>
 
             {listObjArr?.map(item => (
                 <ListItem key={item.id} item={item} />
             ))}
-
-
-
 
         </ul>
 
@@ -139,18 +113,6 @@ const ListItem = ({ item, listsArr }) => {
         /* console.log(e) */
     }
 
-
-    /* console.log(listsArr) */
-
-    /* for (let key in lists) {
-        console.log(key)
-        console.log(lists[key])
-    } */
-    /* {
-        listName?.map(data => (
-            console.log(data)
-        ))
-    } */
 
     return (
         <Link key={item.id} to={{
@@ -168,15 +130,3 @@ const ListItem = ({ item, listsArr }) => {
 
 }
 
-
-
-
-
-/* let teams = [];
-            for (let key of Object.keys(data.teams)) {
-              teams.push({
-                value: data.teams[key].id,
-                label: data.teams[key].name,
-              });
-            }
-            setTeamsArr(teams); */

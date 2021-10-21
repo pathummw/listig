@@ -31,9 +31,9 @@ const Ul = styled.ul`
 `
 
 const glowing = keyframes`
- 0% { box-shadow: 0 0 8px 1px #f3453e}
- 50% { box-shadow: 0 0 8px 5px #f3453e}
- 100% { box-shadow: 0 0 8px 1px #f3453e}
+ 0% { box-shadow: 0 0 5px 1px #f3453e}
+ 50% { box-shadow: 0 0 5px 2px #f3453e}
+ 100% { box-shadow: 0 0 5px 1px #f3453e}
 `
 const anm = keyframes`
  /* 0% { box-shadow: 0 0 8px 1px #3ef379}
