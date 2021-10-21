@@ -8,8 +8,9 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getDatabase, ref, set, onValue, update } from "firebase/database";
-import { AuthUserContext } from './App'
-import { Link } from 'react-router-dom'
+import { AuthUserContext } from './App';
+import { Link } from 'react-router-dom';
+import QuantityComponent from './QuantityComponent';
 
 
 const MainContainer = styled.div`
@@ -329,7 +330,8 @@ const Item = ({ item, authUserId, listName }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label}  <Icon onClick={handleOnClickExpand} /> </Li>
+            <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <QuantityComponent />  <Icon onClick={handleOnClickExpand} /> </Li>
+
 
             {/* </SwipeableListItem> */}
         </div>
