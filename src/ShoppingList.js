@@ -327,6 +327,13 @@ const Item = ({ item, authUserId, listName }) => {
         }
     }
 
+    const handleCallback = (quantity) => {
+        console.log(`Quantity ${quantity}`)
+    }
+    /* const updateQuantity = () => {
+        const db = getDatabase();
+    } */
+
     return (
         <div>
             {/* <SwipeableListItem
@@ -338,7 +345,7 @@ const Item = ({ item, authUserId, listName }) => {
                 }}
             > */}
             <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
-                <QuantityContainerSpan><QuantityComponent /></QuantityContainerSpan>
+                <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
             </Li>
 
 

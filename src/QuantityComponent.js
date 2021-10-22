@@ -33,35 +33,32 @@ const ButtonPlus = styled.button`
     border-radius: 0 3px 3px 0;
 `
 
-export default function QuantityComponent() {
+export default function QuantityComponent(props) {
 
-    const [number, setNumber] = useState(1);
+    const [quantity, setQuantity] = useState(1);
     const [quantityType, setQuantityType] = useState('st');
 
     const handlePlus = () => {
-        setNumber(number + 1);
+        setQuantity(quantity + 1);
+        props.handleCallback(quantity + 1); //Call back funtion to send quantity data to parent component
     }
     const handleMinus = () => {
-        if (number === 1) {
+        if (quantity === 1) {
             alert("Vänta..want to delete item")
         } else {  //When user click the (-) button, delete the item when the Q is = 0
-            setNumber(number - 1);
+            setQuantity(quantity - 1);
+            props.handleCallback(quantity - 1);
         }
 
-
     }
-
-
 
     return (
         <Container>
             <Component>
                 <ButtonMinus onClick={handleMinus}>-</ButtonMinus>
-                <input type="text" value={number} />
+                <input type="text" value={quantity} />
                 <ButtonPlus onClick={handlePlus}>+</ButtonPlus>
             </Component>
-
-
 
             <span>{quantityType}</span>
         </Container>
