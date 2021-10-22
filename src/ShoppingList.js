@@ -327,12 +327,24 @@ const Item = ({ item, authUserId, listName }) => {
         }
     }
 
+    //UPDATE QUANTITY
     const handleCallback = (quantity) => {
         console.log(`Quantity ${quantity}`)
-    }
-    /* const updateQuantity = () => {
         const db = getDatabase();
-    } */
+
+        update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+            quantity: quantity
+        })
+            .then(() => {
+                console.log("Quantity updated successfully")
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        return () => {
+        }
+    }
+
 
     return (
         <div>
