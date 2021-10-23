@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { getDatabase, ref, set, onValue, update } from "firebase/database";
+import { getDatabase, ref, set, onValue, update, remove } from "firebase/database";
 import { AuthUserContext } from './App';
 import { Link } from 'react-router-dom';
 import QuantityComponent from './QuantityComponent';
@@ -329,20 +329,38 @@ const Item = ({ item, authUserId, listName }) => {
 
     //UPDATE QUANTITY
     const handleCallback = (quantity) => {
-        console.log(`Quantity ${quantity}`)
+
         const db = getDatabase();
 
-        update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
-            quantity: quantity
-        })
-            .then(() => {
-                console.log("Quantity updated successfully")
+        console.log(item)
+
+        if (quantity === 0) {
+            console.log("Delete item")
+            remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
+                .then(() => {
+                    console.log("Item deleted")
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            return () => {
+            }
+        } else {
+
+            update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+                quantity: quantity
             })
-            .catch((error) => {
-                console.log(error);
-            })
-        return () => {
+                .then(() => {
+                    console.log("Quantity updated successfully")
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            return () => {
+            }
         }
+
+
     }
 
 
