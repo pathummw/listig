@@ -189,7 +189,6 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
-    const [itemDeleteCheck, setItemDeleteCheck] = useState(false);
 
     var itemExist = false;
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
@@ -246,15 +245,9 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
     }
 
-    const handleDeleted = (item_value) => {
-        /* setItemDeleteCheck(deleted); */
-        console.log("Handle Deleted callback: " + item_value)
-        console.log(myshoppingList)
-
-        //Remove deleted from myshoppingList array and setState again
-        setMyShoppingList(myshoppingList.filter(item => item.value !== item_value))
-        console.log(myshoppingList)
-
+    const handleDeleted = (itemId) => {
+        //Remove deleted item from myshoppingList array and setState to re-render 
+        setMyShoppingList(myshoppingList.filter(item => item.id !== itemId));
     }
 
     return (
@@ -300,20 +293,18 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
     const [expand, setExpand] = useState(false);
     const [checked, setChecked] = useState(false);
     const [greenPoints, setGreenPoints] = useState(null);
-    const [itemDeleted, setItemDeleted] = useState(null);
 
     useEffect(() => {
         if (item) {
             setChecked(item.isSelected);
             setGreenPoints(item.green_points);
-            setItemDeleted(false)
 
             console.log("use effect item")
         }
         return () => {
             //cleanup
         }
-    }, [itemDeleted])
+    }, [])
 
 
 
@@ -353,8 +344,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
             remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
                 .then(() => {
                     console.log("Item deleted")
-                    setItemDeleted(true)
-                    handleDeleted(item.value); ///Callback function
+                    handleDeleted(item.id); ///Callback function to remove deleted item li from the list
                 })
                 .catch((error) => {
                     console.log(error);
