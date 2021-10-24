@@ -189,6 +189,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
+    const [itemDeleteCheck, setItemDeleteCheck] = useState(false);
 
     var itemExist = false;
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
@@ -204,7 +205,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
         }
         return () => {
-            isMounted = false;
+            /*  isMounted = false; */
         }
     }, [listObjArr])
 
@@ -245,6 +246,17 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
     }
 
+    const handleDeleted = (item_value) => {
+        /* setItemDeleteCheck(deleted); */
+        console.log("Handle Deleted callback: " + item_value)
+        console.log(myshoppingList)
+
+        //Remove deleted from myshoppingList array and setState again
+        setMyShoppingList(myshoppingList.filter(item => item.value !== item_value))
+        console.log(myshoppingList)
+
+    }
+
     return (
         <>
 
@@ -254,13 +266,13 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} />
+            <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} />
 
         </>
     );
 }
 
-const ShoppingItemsList = ({ myshoppingList, authUserId, listName }) => {
+const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted }) => {
 
 
     return (
@@ -271,7 +283,7 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName }) => {
             <Ul>
                 {myshoppingList && myshoppingList?.map(item => (
 
-                    <Item key={item.id} item={item} authUserId={authUserId} listName={listName} />
+                    <Item key={item.id} item={item} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} />
 
                 ))}
 
@@ -283,21 +295,25 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName }) => {
     );
 }
 
-const Item = ({ item, authUserId, listName }) => {
+const Item = ({ item, authUserId, listName, handleDeleted }) => {
 
     const [expand, setExpand] = useState(false);
     const [checked, setChecked] = useState(false);
     const [greenPoints, setGreenPoints] = useState(null);
+    const [itemDeleted, setItemDeleted] = useState(null);
 
     useEffect(() => {
         if (item) {
             setChecked(item.isSelected);
             setGreenPoints(item.green_points);
+            setItemDeleted(false)
+
+            console.log("use effect item")
         }
         return () => {
             //cleanup
         }
-    }, [])
+    }, [itemDeleted])
 
 
 
@@ -332,13 +348,13 @@ const Item = ({ item, authUserId, listName }) => {
 
         const db = getDatabase();
 
-        console.log(item)
+        if (quantity === 0) { //Delete an item from the list when user select quantity as 0
 
-        if (quantity === 0) {
-            console.log("Delete item")
             remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
                 .then(() => {
                     console.log("Item deleted")
+                    setItemDeleted(true)
+                    handleDeleted(item.value); ///Callback function
                 })
                 .catch((error) => {
                     console.log(error);
