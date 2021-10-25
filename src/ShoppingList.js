@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LoopIcon from '@mui/icons-material/Loop';
 import { getDatabase, ref, set, onValue, update, remove } from "firebase/database";
 import { AuthUserContext } from './App';
 import { Link } from 'react-router-dom';
@@ -75,9 +76,15 @@ const Li = styled.li`
             `;
         }
     }
-
     }
-  
+`
+
+const SpanButton = styled.span`
+    cursor: pointer;
+    padding: 5px;
+    :hover{
+        color: #110b11;
+    }
 `
 
 const QuantityContainerSpan = styled.span`
@@ -389,7 +396,12 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
             <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
-                <section><p>Klimat kvitto</p></section>
+                <section>
+                    <SpanButton>Klimat påverkan</SpanButton>
+                    <br />
+                    <SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton>
+
+                </section>
             </Li>
 
 
