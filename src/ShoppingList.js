@@ -42,7 +42,7 @@ const anm = keyframes`
  100% { box-shadow: 0 0 8px 1px #3ef379} */
 `
 const Li = styled.li`
-    display: flex;
+    /* display: flex; */
     background-color: whitesmoke;
     color: #aaa;
     padding: 5px;
@@ -56,16 +56,22 @@ const Li = styled.li`
     /* box-shadow: 0 0 32px 3.5px #f3453e; */
     align-items: center;
     text-decoration: ${props => props.checked ? 'line-through' : 'none'};
+    transition: 1s;
     ${props => {
         if (props.expand) {
             return `
-            background-color: green;
+            background-color: #D0D0D0;
             height: 100px;
             transition: 1s;
+            section{
+                display: block;
+            }
             `;
         } else if (!props.expand) {
             return `
-            /* background-color: red; */
+            section{
+                display: none;
+            }
             `;
         }
     }
@@ -204,7 +210,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
         }
         return () => {
-            /*  isMounted = false; */
+            isMounted = false;
         }
     }, [listObjArr])
 
@@ -382,6 +388,8 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
             > */}
             <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
+
+                <section><p>Klimat kvitto</p></section>
             </Li>
 
 
