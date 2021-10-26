@@ -12,6 +12,7 @@ import { getDatabase, ref, set, onValue, update, remove } from "firebase/databas
 import { AuthUserContext } from './App';
 import { Link } from 'react-router-dom';
 import QuantityComponent from './QuantityComponent';
+import { GROCERY_ITEMS_DATA } from './data'
 
 
 const MainContainer = styled.div`
@@ -33,9 +34,9 @@ const Ul = styled.ul`
 `
 
 const glowing = keyframes`
- 0% { box-shadow: 0 0 5px 1px #f3453e}
- 50% { box-shadow: 0 0 5px 2px #f3453e}
- 100% { box-shadow: 0 0 5px 1px #f3453e}
+ 0% { box-shadow: 0 0 1px 0.5px #f3453e}
+ 50% { box-shadow: 0 0 5px 0.5px #f3453e}
+ 100% { box-shadow: 0 0 1px 0.5px #f3453e}
 `
 const anm = keyframes`
  /* 0% { box-shadow: 0 0 8px 1px #3ef379}
@@ -112,13 +113,15 @@ export default function ShoppingList() {
     const authUserId = useContext(AuthUserContext);
 
     const [listObjArr, setListObjectArr] = useState([]);
+    const [groceryItemsArray, setGroceryItemsArray] = useState([]);
 
 
     useEffect(() => {
 
         let isMounted = true;
-        //When user create a new shopping list, save the empty list with the Shopping list name to db
 
+        setGroceryItemsArray(GROCERY_ITEMS_DATA)
+        //When user create a new shopping list, save the empty list with the Shopping list name to db
         const db = getDatabase();
         if (newList && isMounted) {
             console.log(`Shopping List created with the name ${listName} `)
@@ -194,7 +197,7 @@ export default function ShoppingList() {
             <Link to="/">
                 <button>Back to home</button>
             </Link>
-            <SearchBar options={options} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
+            <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
 
         </MainContainer>
     )
@@ -241,8 +244,13 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
             const db = getDatabase();
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + selectedItem.value), {
                 id: selectedItem.id,
-                quantity: '1kg',
-                green_points: selectedItem.green_points
+                label: selectedItem.label,
+                green_points: selectedItem.green_points,
+                quantity_type: selectedItem.quantity_type,
+                quantity: '1',
+                category: selectedItem.category,
+                group: selectedItem.group
+
             })
                 .then(() => {
                     console.log("Item saved successfully")
@@ -399,9 +407,23 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
                 <section>
-                    <Link to="/climate-impact"><SpanButton>Klimat påverkan</SpanButton></Link>
+                    <Link to={{
+                        pathname: "/climate-impact",
+                        state: {
+                            item: item
+                        }
+                    }}>
+                        <SpanButton>Klimat påverkan</SpanButton>
+                    </Link>
                     <br />
-                    <Link to="/alternative"><SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton></Link>
+                    <Link to={{
+                        pathname: "/alternative",
+                        state: {
+                            item: item
+                        }
+                    }}>
+                        <SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton>
+                    </Link>
 
                 </section>
             </Li>
