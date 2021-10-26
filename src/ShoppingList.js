@@ -49,6 +49,7 @@ const Li = styled.li`
     padding: 5px;
     margin: 7px auto;
     border-radius: 10px;
+    cursor: pointer;
     /* box-shadow: ${props => props.green_points < 3 ? '0 0 8px 1px #f3453e' : 'none'}; */
     animation: ${props => props.green_points < 3 ? 'glowing 1300ms infinite' : 'none'} ;
     animation-name: ${props => props.green_points < 3 ? glowing : anm};
@@ -88,13 +89,14 @@ const SpanButton = styled.span`
 `
 
 const QuantityContainerSpan = styled.span`
-        position: absolute;
-        right: 75px;
+    position: absolute;
+    right: 75px;
 `
 
 const Icon = styled(ExpandMoreIcon)`
-position: absolute;
-right: 25px;
+    cursor: pointer;
+    position: absolute;
+    right: 25px;
 `
 
 
@@ -393,7 +395,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                     action: () => console.info('swipe action triggered')
                 }}
             > */}
-            <Li expand={expand} checked={checked} green_points={greenPoints}> <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
+            <Li expand={expand} checked={checked} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
                 <section>
