@@ -399,9 +399,9 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
                 <section>
-                    <SpanButton>Klimat påverkan</SpanButton>
+                    <Link to="/climate-impact"><SpanButton>Klimat påverkan</SpanButton></Link>
                     <br />
-                    <SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton>
+                    <Link to="/alternative"><SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton></Link>
 
                 </section>
             </Li>
