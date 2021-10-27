@@ -160,8 +160,10 @@ export default function ShoppingList() {
                         keys.push(key)
                         listsArr.push(openedListItemsObj[key])
                         templistObjArr.push({
-                            value: key, label: key, id: openedListItemsObj[key].id,
-                            green_points: openedListItemsObj[key].green_points, isSelected: openedListItemsObj[key].isSelected
+                            value: key, label: openedListItemsObj[key].label, id: openedListItemsObj[key].id,
+                            green_points: openedListItemsObj[key].green_points, isSelected: openedListItemsObj[key].isSelected,
+                            category: openedListItemsObj[key].category, group: openedListItemsObj[key].group,
+                            quantity: openedListItemsObj[key].quantity, quantity_type: openedListItemsObj[key].quantity_type
                         })
                     }
 
