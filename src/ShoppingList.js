@@ -421,7 +421,9 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                     <Link to={{
                         pathname: "/alternative",
                         state: {
-                            item: item
+                            item: item,
+                            authUserId: authUserId,
+                            listName: listName
                         }
                     }}>
                         <SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton>

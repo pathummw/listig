@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, remove } from "firebase/database";
 
 
 
@@ -118,5 +118,43 @@ export function doSignOut() {
         console.log("Erro Sign-out")
     });
 }
+
+//update list items 2021/10/27
+
+export function saveItem(authUserId, listName, item) {
+
+    const db = getDatabase();
+    set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+        id: item.id,
+        label: item.label,
+        green_points: item.green_points,
+        quantity_type: item.quantity_type,
+        quantity: '1',
+        category: item.category,
+        group: item.group,
+        isSelected: false
+    })
+        .then(() => {
+            console.log("Item saved successfully")
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+export function deleteItem(authUserId, listName, item) {
+
+    const db = getDatabase();
+
+    remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
+        .then(() => {
+            console.log("Item deleted")
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+
 
 
