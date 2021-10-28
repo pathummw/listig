@@ -13,6 +13,7 @@ import { AuthUserContext } from './App';
 import { Link } from 'react-router-dom';
 import QuantityComponent from './QuantityComponent';
 import { GROCERY_ITEMS_DATA } from './data'
+import { saveItem, deleteItem } from './firebase'
 
 
 const MainContainer = styled.div`
@@ -251,7 +252,8 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 quantity_type: selectedItem.quantity_type,
                 quantity: '1',
                 category: selectedItem.category,
-                group: selectedItem.group
+                group: selectedItem.group,
+                isSelected: false
 
             })
                 .then(() => {

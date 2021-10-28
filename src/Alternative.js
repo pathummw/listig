@@ -17,7 +17,12 @@ const Ul = styled.ul`
 `
 
 const Li = styled.li`
-    /* text-decoration: none; */
+    display: flex;
+    height: 70px;
+    background-color: whitesmoke;
+    margin: 10px;
+    align-items: center;
+    border-radius: 10px;
 `
 
 const Button = styled.button`
@@ -77,7 +82,7 @@ export default function Alternative() {
             <Ul>
                 {alternativeItemsArray && alternativeItemsArray.map(data => (
                     <Li> <Checkbox onChange={() => handleChangeCheckbox(data)} />
-                        <span>{data.label}</span>
+                        <span>{data.label}</span> <GreenPointsPercentage green_points={data.green_points} />
                     </Li>
                 ))
                 }
@@ -86,5 +91,36 @@ export default function Alternative() {
 
             <Button onClick={onClickChangeItem}>BYT UT VARAN</Button>
         </Container>
+    )
+}
+
+
+const PercentageContainer = styled.div`
+    display: flex;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: ${props => props.percentage > 50 ? 'green' : 'red'};
+    position: absolute;
+    right: 80px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: large;
+    span{
+        font-size: 0.6rem;
+    }
+`
+
+const GreenPointsPercentage = ({ green_points }) => {
+
+    const percentage = ((green_points / 5) * 100);
+
+    return (
+
+        <PercentageContainer percentage={percentage} >
+            {percentage} <span>%</span>
+        </PercentageContainer>
+
     )
 }
