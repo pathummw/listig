@@ -81,7 +81,7 @@ export default function Alternative() {
             <h1>Hej Alternativ varor </h1>
             <Ul>
                 {alternativeItemsArray && alternativeItemsArray.map(data => (
-                    <Li> <Checkbox onChange={() => handleChangeCheckbox(data)} />
+                    <Li key={data.id}> <Checkbox onChange={() => handleChangeCheckbox(data)} />
                         <span>{data.label}</span> <GreenPointsPercentage green_points={data.green_points} />
                     </Li>
                 ))
