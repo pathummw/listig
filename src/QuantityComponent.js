@@ -52,11 +52,16 @@ export default function QuantityComponent(props) {
 
     }
 
+    const handleOnChange = (e) => {
+        setQuantity(e.target.value);
+        props.handleCallback(e.target.value)
+    }
+
     return (
         <Container>
             <Component>
                 <ButtonMinus onClick={handleMinus}>-</ButtonMinus>
-                <input type="text" value={quantity} />
+                <input type="text" value={quantity} onChange={handleOnChange} />
                 <ButtonPlus onClick={handlePlus}>+</ButtonPlus>
             </Component>
 

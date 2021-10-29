@@ -18,10 +18,6 @@ function App() {
 
 
   const [currentUser, setCurrentUser] = useState(null)
-  const [isUserSignedIn, setIsUserSignedIn] = useState(false)
-  /* const [uid, setUid] = useState(); */
-
-  /*  const value = useContext(AuthUserContext); */
 
   const auth = getAuth();
   useEffect(() => {
@@ -33,19 +29,17 @@ function App() {
         const uid = user.uid;
         console.log("UID: " + uid)
         setCurrentUser(uid)
-        setIsUserSignedIn(true)
         console.log("Current USER: " + currentUser)
       } else {
         console.log("User signed out: OnAuthstatgeChanged")
         setCurrentUser(null)
-        setIsUserSignedIn(false)
       }
     })
 
     return unsubscribe;  //when unmount component, unsubscribe onAuthStateChanged
 
 
-  }, [])
+  }, [currentUser])
 
 
   return (

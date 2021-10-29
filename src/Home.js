@@ -39,8 +39,8 @@ export default function Home(props) {
             });
 
             if (isMounted) {
-                setListNames(childKeysArr); //Set the list names 
-                setListData(childDataArr);
+                /* setListNames(childKeysArr);  *///Set the list names 
+                /* setListData(childDataArr); */
                 setLists(snapshot.val());
             }
 
@@ -57,13 +57,14 @@ export default function Home(props) {
 
 
     async function handleSignOut() {
-        setError('')
+        /* setError('') */
 
         try {
             await doSignOut()
             history.push('/signin')
         } catch {
-            setError('Failed to sign out')
+            /* setError('Failed to sign out') */
+            console.log('Failed to sign out')
         }
 
     }

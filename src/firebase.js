@@ -75,7 +75,7 @@ export function signin(email, password) {
                 console.log(user.email)
                 console.log(user.uid)
             } */
-            sessionStorage.setItem('authUser', auth.currentUser.uid);  //Save the signed in user id in session storage
+            /* sessionStorage.setItem('authUser', auth.currentUser.uid); */  //Save the signed in user id in session storage
 
         })
         .catch((error) => {
@@ -110,7 +110,7 @@ const user = auth.currentUser;
 export function doSignOut() {
     signOut(auth).then(() => {
         // Remove all saved data from sessionStorage
-        sessionStorage.clear();
+        /* sessionStorage.clear(); */
         // Sign-out successful.
         console.log("Sign-out successful")
     }).catch((error) => {

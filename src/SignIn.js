@@ -23,15 +23,15 @@ export default function SignIn() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            setError('')
-            setLoading(true)
+            /*  setError('')
+             setLoading(true) */
             await signin(emailRef.current.value, passwordRef.current.value)
             history.push('/')
         } catch {
-            setError("Failed to sign in")
+            /* setError("Failed to sign in") */
         }
 
-        setLoading(false)
+        /* setLoading(false) */
     }
 
 
@@ -45,7 +45,7 @@ export default function SignIn() {
                 <input type="password" ref={passwordRef} />
                 <button>Sign in</button>
             </form>
-            <span>{sessionStorage.getItem('authUser')}</span>
+            {/* <span>{sessionStorage.getItem('authUser')}</span> */}
             <span>Need an account? <Link to="/signup">Sign up</Link> </span>
 
         </div>

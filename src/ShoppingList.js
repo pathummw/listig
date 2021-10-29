@@ -211,6 +211,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
     const [myshoppingList, setMyShoppingList] = useState([]);
 
+
     var itemExist = false;
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
     useEffect(() => {
@@ -230,6 +231,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
     }, [listObjArr])
 
     /* ---------------------------------- */
+
 
     const handleChange = (selectedItem) => {
 
