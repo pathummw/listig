@@ -53,8 +53,7 @@ export default function Alternative() {
     useEffect(() => {
 
 
-        const result = GROCERY_ITEMS_DATA.filter(i => i.group === item.group && i.value !== item.value)
-
+        const result = GROCERY_ITEMS_DATA.filter(i => i.group === item.group && i.value !== item.value && i.green_points >= 3);
         setAlternativeItemsArray(result);
 
         return () => {

@@ -103,7 +103,7 @@ export const GROCERY_ITEMS_DATA = [
         value: 'nöttfärs',
         label: 'Nött färs',
         id: 503,
-        green_points: 5,
+        green_points: 1,
         quantity_type: 'kg',
         category: 'meet',
         group: 'färs'
