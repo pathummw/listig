@@ -36,15 +36,21 @@ const Form = styled.form`
 
 const Input = styled.input`
     display: block;
-    padding: 10px 6px;
+    padding: 10px;
     width: 100%;
     box-sizing: border-box;
     border: none;
-    color: #E2E2E2;
-    background-color: green;
+    color: #000000;
     border-radius: 10px;
     margin: 20px 0;
-    background: green;
+    background-color: #E2E2E2;
+    &:-webkit-autofill,   //to change the auto complete browser background color for inputs
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+    -webkit-transition: "background-color";
+    -webkit-transition-delay: 9999s;
+    }
 `
 
 const Button = styled.button`
