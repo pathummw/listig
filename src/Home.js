@@ -6,6 +6,18 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import { DisabledByDefaultRounded } from '@mui/icons-material';
 import styled from 'styled-components';
 import { StyledLink } from './GlobalStyles';
+import HandsImage from './img/hands.svg'
+import { devices } from './GlobalStyles';
+
+const HomeContainer = styled.div`
+    height: 100vh;
+    background-image: url(${HandsImage});
+    background-repeat: no-repeat;
+    background-size: 100%; 
+    @media ${devices.iPhone5}{
+        background-position: bottom;
+    }
+`
 
 const Ul = styled.ul`
     list-style-type: none;
@@ -17,7 +29,7 @@ const Li = styled.li`
     align-items: center;
     margin: 10px 30px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #E1E1E1;
     color: #353535;
     padding: 10px;
@@ -88,7 +100,7 @@ export default function Home(props) {
     }
 
     return (
-        <div>
+        <HomeContainer>
             <h3>Hello home component{props.currentUser}</h3>
             <button onClick={() => handleSignOut()}>Sign out</button>
             <StyledLink to="/create-new-list">Ny list</StyledLink>
@@ -96,7 +108,7 @@ export default function Home(props) {
             {loading && <div>Loading ...</div>}
 
             {lists && <ShoppingLists lists={lists} />}
-        </div>
+        </HomeContainer>
     )
 }
 
