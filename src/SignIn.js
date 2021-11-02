@@ -18,8 +18,13 @@ const SignInContainer = styled.div`
     width: auto;
     background-image: url(${BackgroundImage});
     background-repeat: no-repeat;
-    /* background-position: center; */
-    background-position: 30% 200px;
+    background-size: cover; 
+    @media ${devices.iPhone5}{
+        background-position: 30% 150px;
+    }
+    @media ${devices.iphone6_7_8_X}{
+        background-position: 30% 200px;
+    }
     /* background-size: cover; */ /* Resize the background image to cover the entire container */
 `
 

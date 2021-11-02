@@ -1,7 +1,9 @@
 const sizes = {
-    mobileS: '320px',
-    mobileM: '375px',
-    mobileL: '425px',
+    iPhone5: '320px',
+    galaxyS5: '360px',
+    iphone6_7_8_X: '375px',
+    iphone6_7_8Plus: '414px',
+    pixel2: '411px',
     tablet: '768px',
     laptop: '1024px',
     laptopL: '1440px',
@@ -9,9 +11,11 @@ const sizes = {
 };
 
 export const devices = {
-    mobileS: `(min-width: ${sizes.mobileS})`,
-    mobileM: `(min-width: ${sizes.mobileM})`,
-    mobileL: `(min-width: ${sizes.mobileL})`,
+    iPhone5: `(min-width: ${sizes.iPhone5})`,
+    galaxyS5: `(min-width: ${sizes.galaxyS5})`,
+    iphone6_7_8_X: `(min-width: ${sizes.iphone6_7_8_X})`,
+    iphone6_7_8Plus: `(min-width: ${sizes.iphone6_7_8Plus})`,
+    pixel2: `(min-width: ${sizes.pixel2})`,
     tablet: `(min-width: ${sizes.tablet})`,
     laptop: `(min-width: ${sizes.laptop})`,
     laptopL: `(min-width: ${sizes.laptopL})`,

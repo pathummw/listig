@@ -38,12 +38,6 @@ export default function QuantityComponent(props) {
     const [quantity, setQuantity] = useState(1);
     const [quantityType, setQuantityType] = useState('st');
 
-    useEffect(() => {
-        //effect
-        return () => {
-            //cleanup
-        }
-    }, [quantity])
 
     const handlePlus = () => {
         setQuantity(quantity + 1);
