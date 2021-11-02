@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import QuantityComponent from './QuantityComponent';
 import { GROCERY_ITEMS_DATA } from './data'
 import { saveItem, deleteItem } from './firebase'
+import { StyledLink } from './GlobalStyles';
 
 
 const MainContainer = styled.div`
@@ -197,9 +198,9 @@ export default function ShoppingList() {
     return (
         <MainContainer>
             <h1>Here is your shopping list {listName}</h1>
-            <Link to="/">
+            <StyledLink to="/">
                 <button>Back to home</button>
-            </Link>
+            </StyledLink>
             <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
 
         </MainContainer>
@@ -413,16 +414,16 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
                 <section>
-                    <Link to={{
+                    <StyledLink to={{
                         pathname: "/climate-impact",
                         state: {
                             item: item
                         }
                     }}>
                         <SpanButton>Klimat påverkan</SpanButton>
-                    </Link>
+                    </StyledLink>
                     <br />
-                    <Link to={{
+                    <StyledLink to={{
                         pathname: "/alternative",
                         state: {
                             item: item,
@@ -431,7 +432,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                         }
                     }}>
                         <SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton>
-                    </Link>
+                    </StyledLink>
 
                 </section>
             </Li>

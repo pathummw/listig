@@ -48,6 +48,7 @@ const Input = styled.input`
     color: #000000;
     border-radius: 10px;
     margin: 20px 0;
+    font-family:  Roboto;
     background-color: #E2E2E2;
     &:-webkit-autofill,   //to change the auto complete browser background color for inputs
     &:-webkit-autofill:hover,

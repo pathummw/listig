@@ -4,6 +4,24 @@ import { Link, useHistory } from 'react-router-dom'
 import { AuthUserContext } from './App'
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { DisabledByDefaultRounded } from '@mui/icons-material';
+import styled from 'styled-components';
+import { StyledLink } from './GlobalStyles';
+
+const Ul = styled.ul`
+    list-style-type: none;
+    padding: 0;
+`
+
+const Li = styled.li`
+    display: flex;
+    align-items: center;
+    margin: 10px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #E1E1E1;
+    color: #353535;
+    padding: 10px;
+`
 
 export default function Home(props) {
 
@@ -73,7 +91,7 @@ export default function Home(props) {
         <div>
             <h3>Hello home component{props.currentUser}</h3>
             <button onClick={() => handleSignOut()}>Sign out</button>
-            <Link to="/create-new-list">Ny list</Link>
+            <StyledLink to="/create-new-list">Ny list</StyledLink>
 
             {loading && <div>Loading ...</div>}
 
@@ -97,13 +115,13 @@ const ShoppingLists = ({ lists }) => {
 
     return (
 
-        <ul>
+        <Ul>
 
             {listObjArr?.map(item => (
                 <ListItem key={item.id} item={item} />
             ))}
 
-        </ul>
+        </Ul>
 
     );
 }
@@ -116,7 +134,7 @@ const ListItem = ({ item, listsArr }) => {
 
 
     return (
-        <Link key={item.id} to={{
+        <StyledLink key={item.id} to={{
             pathname: "/shopping-list",
             state: {
                 id: item.id,
@@ -125,8 +143,8 @@ const ListItem = ({ item, listsArr }) => {
             }
         }}
         >
-            <li onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</li>
-        </Link>
+            <Li onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</Li>
+        </StyledLink>
     )
 
 }

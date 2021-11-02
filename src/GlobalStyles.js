@@ -1,3 +1,7 @@
+
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
 const sizes = {
     iPhone5: '320px',
     galaxyS5: '360px',
@@ -21,3 +25,16 @@ export const devices = {
     laptopL: `(min-width: ${sizes.laptopL})`,
     desktop: `(min-width: ${sizes.desktop})`,
 };
+
+export const StyledLink = styled(Link)`
+    text-decoration: none;
+
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+`;
+
+/* Headings 45px - Black
+Sub heading 17px - Bold
+Normal text 15px - Light
+Övrig text mindre 15px - Thin italic */
