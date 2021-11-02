@@ -8,8 +8,14 @@ import styled from 'styled-components';
 import { StyledLink } from './GlobalStyles';
 import HandsImage from './img/hands.svg'
 import { devices } from './GlobalStyles';
+import ListIcon from '@mui/icons-material/List';
+import AddIcon from '@mui/icons-material/Add';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const HomeContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 100vh;
     background-image: url(${HandsImage});
     background-repeat: no-repeat;
@@ -22,18 +28,56 @@ const HomeContainer = styled.div`
 const Ul = styled.ul`
     list-style-type: none;
     padding: 0;
+    width: 100%;
 `
 
 const Li = styled.li`
     display: flex;
     align-items: center;
-    margin: 10px 30px;
+    margin: 10px;
     text-decoration: none;
     border-radius: 10px;
     background-color: #E1E1E1;
     color: #353535;
     padding: 10px;
+    font-weight: bold;
 `
+
+const NewListButton = styled(Link)`
+    text-decoration: none;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px;
+    width: 70%;
+    position: fixed;
+    bottom: 10px;
+    margin: 0 30px;
+    padding: 10px 30px;
+    color: #000000;
+    font-weight: bold;
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+`;
+
+const PlusIcon = styled(AddIcon)`
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+`
+
+const MyListIcon = styled(ListIcon)`
+    padding-right: 10px;
+    color: #353535;
+`
+
+const MoreIcon = styled(MoreHorizIcon)`
+    position: absolute;
+    right: 25px;
+    color: #353535;
+`
+
 
 export default function Home(props) {
 
@@ -101,9 +145,12 @@ export default function Home(props) {
 
     return (
         <HomeContainer>
-            <h3>Hello home component{props.currentUser}</h3>
+            {/* <h3>Hello home component{props.currentUser}</h3> */}
             <button onClick={() => handleSignOut()}>Sign out</button>
-            <StyledLink to="/create-new-list">Ny list</StyledLink>
+
+            {/* <StyledSpan> */}
+            <NewListButton to="/create-new-list"> <PlusIcon /> Ny lista</NewListButton>
+            {/* </StyledSpan> */}
 
             {loading && <div>Loading ...</div>}
 
@@ -155,7 +202,7 @@ const ListItem = ({ item, listsArr }) => {
             }
         }}
         >
-            <Li onClick={() => handleClick(item.id)} >{item.name} and id : {item.id}</Li>
+            <Li onClick={() => handleClick(item.id)} > <MyListIcon />  {item.name} <MoreIcon /> </Li>   {/* and id : {item.id} */}
         </StyledLink>
     )
 
