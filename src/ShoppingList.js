@@ -125,6 +125,20 @@ const KlimatKvitto = styled.div`
     position: sticky;
     bottom: 5px;
     color:  ${props => props.color == '#EDE641' ? '#000000' : '#FFFFFF'};
+
+
+    ${props => {
+        if (props.expandKvitto) {
+            return `   
+            height: 90vh;
+            `;
+        } else if (!props.expandKvitto) {
+            return `
+            
+            `;
+        }
+    }
+    }
 `
 
 
@@ -238,6 +252,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
+    const [expandKvitto, setExpandKvitto] = useState(false);
 
 
     var itemExist = false;
@@ -307,6 +322,10 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
         setMyShoppingList(myshoppingList.filter(item => item.id !== itemId));
     }
 
+    const onClickKlimatKvitto = () => {
+        setExpandKvitto(!expandKvitto);
+    }
+
     return (
         <>
 
@@ -320,7 +339,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
             {/* Render the Klimatkvitto comp. only if there is items on shopping list && send bg color to styled components accroding to green points 
             => if there is at least one item that green_points are below 3, set bg yellow*/}
-            {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} >
+            {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} onClick={onClickKlimatKvitto} expandKvitto={expandKvitto}>
                 Klimatkvitto
             </KlimatKvitto>}
 
