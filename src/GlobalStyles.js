@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 const sizes = {
     iPhone5: '320px',
@@ -33,6 +34,9 @@ export const StyledLink = styled(Link)`
         text-decoration: none;
     }
 `;
+
+
+
 
 /* Headings 45px - Black
 Sub heading 17px - Bold

@@ -3,7 +3,8 @@ import { useLocation } from 'react-router-dom'
 import { GROCERY_ITEMS_DATA } from './data'
 import Checkbox from '@mui/material/Checkbox';
 import styled from 'styled-components'
-import { saveItem, deleteItem } from './firebase'
+import { saveItem, deleteItem } from './firebase';
+import { Link, useHistory } from 'react-router-dom';
 
 const Container = styled.div`
     display: flex; 
@@ -46,6 +47,8 @@ export default function Alternative() {
     const authUserId = location.state?.authUserId;
     const listName = location.state?.listName;
 
+    let history = useHistory();
+
     console.log(location.state)
 
     const [alternativeItemsArray, setAlternativeItemsArray] = useState([]);
@@ -78,6 +81,7 @@ export default function Alternative() {
 
         <Container>
             <h1>Hej Alternativ varor </h1>
+            <button onClick={() => history.goBack()}>Back</button>
             <Ul>
                 {alternativeItemsArray && alternativeItemsArray.map(data => (
                     <Li key={data.id}> <Checkbox onChange={() => handleChangeCheckbox(data)} />

@@ -15,7 +15,7 @@ const Component = styled.div`
 
     }
     & > button{ 
-        background-color: #008B52;
+        background-color: #5F5F5F;
         cursor: pointer;
         border: none;
         text-align: center;
@@ -28,9 +28,15 @@ const Component = styled.div`
 
 const ButtonMinus = styled.button`
     border-radius: 3px 0 0 3px;
+    color: whitesmoke;
 `
 const ButtonPlus = styled.button`
     border-radius: 0 3px 3px 0;
+    color: whitesmoke;
+`
+
+const QTypeSpan = styled.span`
+    padding-left: 5px;
 `
 
 export default function QuantityComponent(props) {
@@ -66,7 +72,7 @@ export default function QuantityComponent(props) {
                 <ButtonPlus onClick={handlePlus}>+</ButtonPlus>
             </Component>
 
-            <span>{quantityType}</span>
+            <QTypeSpan>{quantityType}</QTypeSpan>
         </Container>
     )
 }

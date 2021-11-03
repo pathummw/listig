@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Select from 'react-select'
 import styled, { keyframes } from 'styled-components'
-import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
@@ -15,6 +14,9 @@ import QuantityComponent from './QuantityComponent';
 import { GROCERY_ITEMS_DATA } from './data'
 import { saveItem, deleteItem } from './firebase'
 import { StyledLink } from './GlobalStyles';
+import InfoIcon from '@mui/icons-material/Info';
+import BackButton from './BackButton';
+
 
 
 const MainContainer = styled.div`
@@ -47,8 +49,9 @@ const anm = keyframes`
 `
 const Li = styled.li`
     /* display: flex; */
-    background-color: whitesmoke;
-    color: #aaa;
+    background-color: #E1E1E1;
+    color: #353535;
+    font-weight: 500;
     padding: 5px;
     margin: 7px auto;
     border-radius: 10px;
@@ -59,9 +62,10 @@ const Li = styled.li`
     animation-duration: 1s;
     animation-iteration-count: infinite;
     /* box-shadow: 0 0 32px 3.5px #f3453e; */
-    align-items: center;
+    /* align-items: center; */
     text-decoration: ${props => props.checked ? 'line-through' : 'none'};
     transition: 1s;
+    position: relative;  //To set quantity and expand components relative to the Li
     ${props => {
         if (props.expand) {
             return `
@@ -86,6 +90,7 @@ const Li = styled.li`
 const SpanButton = styled.span`
     cursor: pointer;
     padding: 5px;
+    color: #353535;
     :hover{
         color: #110b11;
     }
@@ -94,13 +99,30 @@ const SpanButton = styled.span`
 const QuantityContainerSpan = styled.span`
     position: absolute;
     right: 75px;
+    top: 15px;
 `
 
 const Icon = styled(ExpandMoreIcon)`
     cursor: pointer;
     position: absolute;
     right: 25px;
+    top: 15px;
 `
+
+const H1 = styled.h1`
+    font-weight: bold;
+    text-align: center;
+`
+const KlimatKvitto = styled.div`
+    background-color: yellow;
+    font-weight: bold;
+    padding: 14px;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 5px;
+    width: 81%;
+`
+
 
 
 
@@ -188,20 +210,18 @@ export default function ShoppingList() {
 
     }, [])
 
-    const options = [
-        { value: 'chocolate', label: 'Chocolate', id: 112, green_points: 3 },
-        { value: 'strawberry', label: 'Strawberry', id: 113, green_points: 4 },
-        { value: 'vanilla', label: 'Vanilla', id: 114, green_points: 5 },
-        { value: 'nötfärs', label: 'Nötfärs', id: 115, green_points: 1 }
-    ]
 
     return (
         <MainContainer>
-            <h1>Here is your shopping list {listName}</h1>
             <StyledLink to="/">
-                <button>Back to home</button>
+                <BackButton />
             </StyledLink>
+
+            <H1>{listName}</H1>
+
             <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
+
+            <KlimatKvitto>Klimatkvitto</KlimatKvitto>
 
         </MainContainer>
     )
@@ -301,8 +321,6 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted
     return (
         <ShoppingListContainer>
 
-            <h3>Items list</h3>
-            {/* <SwipeableList> */}
             <Ul>
                 {myshoppingList && myshoppingList?.map(item => (
 
@@ -312,7 +330,6 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted
 
 
             </Ul>
-            {/* </SwipeableList> */}
         </ShoppingListContainer>
 
     );
@@ -402,14 +419,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
 
     return (
         <div>
-            {/* <SwipeableListItem
-                swipeLeft={{
-                    action: () => console.info('swipe action triggered')
-                }}
-                swipeRight={{
-                    action: () => console.info('swipe action triggered')
-                }}
-            > */}
+
             <Li expand={expand} checked={checked} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
@@ -420,7 +430,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                             item: item
                         }
                     }}>
-                        <SpanButton>Klimat påverkan</SpanButton>
+                        <SpanButton> <InfoIcon /> Klimat påverkan</SpanButton>
                     </StyledLink>
                     <br />
                     <StyledLink to={{
@@ -437,8 +447,6 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                 </section>
             </Li>
 
-
-            {/* </SwipeableListItem> */}
         </div>
     )
 }
