@@ -22,6 +22,7 @@ import BackButton from './BackButton';
 const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
+    margin: 0 20px;
 `
 const ShoppingListContainer = styled.div`
     display: flex;
@@ -60,9 +61,10 @@ const Li = styled.li`
     animation-name: ${props => props.green_points < 3 ? glowing : anm};
     animation-duration: 1s;
     animation-iteration-count: infinite;
-    /* box-shadow: 0 0 32px 3.5px #f3453e; */
-    /* align-items: center; */
-    text-decoration: ${props => props.checked ? 'line-through' : 'none'};
+    &:section{
+        text-decoration: none;
+        background-color: red;
+    }
     transition: 1s;
     position: relative;  //To set quantity and expand components relative to the Li
     ${props => {
@@ -85,6 +87,9 @@ const Li = styled.li`
     }
     }
 `
+const ItemSpan = styled.span`
+    text-decoration: ${props => props.checked ? 'line-through' : 'none'};
+`
 
 const SpanButton = styled.span`
     cursor: pointer;
@@ -97,7 +102,7 @@ const SpanButton = styled.span`
 
 const QuantityContainerSpan = styled.span`
     position: absolute;
-    right: 75px;
+    right: 50px;
     top: 15px;
 `
 
@@ -119,6 +124,7 @@ const KlimatKvitto = styled.div`
     border-radius: 10px;
     position: sticky;
     bottom: 5px;
+    color:  ${props => props.color == '#EDE641' ? '#000000' : '#FFFFFF'};
 `
 
 
@@ -314,7 +320,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
             {/* Render the Klimatkvitto comp. only if there is items on shopping list && send bg color to styled components accroding to green points 
             => if there is at least one item that green_points are below 3, set bg yellow*/}
-            {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
+            {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} >
                 Klimatkvitto
             </KlimatKvitto>}
 
@@ -427,7 +433,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
     return (
         <div>
 
-            <Li expand={expand} checked={checked} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> {item.label} <Icon onClick={handleOnClickExpand} />
+            <Li expand={expand} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> <ItemSpan checked={checked}> {item.label} </ItemSpan> <Icon onClick={handleOnClickExpand} />
                 <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
 
                 <section>
