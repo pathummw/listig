@@ -17,6 +17,8 @@ import { StyledLink } from './GlobalStyles';
 import InfoIcon from '@mui/icons-material/Info';
 import BackButton from './BackButton';
 
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 
 
 const MainContainer = styled.div`
@@ -125,23 +127,12 @@ const KlimatKvitto = styled.div`
     position: sticky;
     bottom: 5px;
     color:  ${props => props.color == '#EDE641' ? '#000000' : '#FFFFFF'};
-
-
-    ${props => {
-        if (props.expandKvitto) {
-            return `   
-            height: 90vh;
-            `;
-        } else if (!props.expandKvitto) {
-            return `
-            
-            `;
-        }
-    }
-    }
+    height: ${props => props.expandKvitto ? '90vh' : ''};
 `
-
-
+const ExpandIconContainer = styled.span`
+    position: absolute;
+    right: 10px;
+`
 
 
 export default function ShoppingList() {
@@ -341,6 +332,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
             => if there is at least one item that green_points are below 3, set bg yellow*/}
             {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} onClick={onClickKlimatKvitto} expandKvitto={expandKvitto}>
                 Klimatkvitto
+                <ExpandIconContainer>{expandKvitto ? <ExpandMoreIcon /> : <ExpandLessIcon />}</ExpandIconContainer>
             </KlimatKvitto>}
 
         </>
