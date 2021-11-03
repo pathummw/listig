@@ -311,9 +311,12 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 />
             </SearchBox>
             <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} />
-            <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
+
+            {/* Render the Klimatkvitto comp. only if there is items on shopping list && send bg color to styled components accroding to green points 
+            => if there is at least one item that green_points are below 3, set bg yellow*/}
+            {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
                 Klimatkvitto
-            </KlimatKvitto>
+            </KlimatKvitto>}
 
         </>
     );
