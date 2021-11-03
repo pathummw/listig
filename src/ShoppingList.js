@@ -22,7 +22,6 @@ import BackButton from './BackButton';
 const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 0 20px;
 `
 const ShoppingListContainer = styled.div`
     display: flex;
@@ -114,13 +113,12 @@ const H1 = styled.h1`
     text-align: center;
 `
 const KlimatKvitto = styled.div`
-    background-color: yellow;
+    background-color: ${props => props.color};
     font-weight: bold;
     padding: 14px;
     border-radius: 10px;
-    position: fixed;
+    position: sticky;
     bottom: 5px;
-    width: 81%;
 `
 
 
@@ -221,7 +219,10 @@ export default function ShoppingList() {
 
             <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
 
-            <KlimatKvitto>Klimatkvitto</KlimatKvitto>
+            {/* <KlimatKvitto color={listObjArr.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
+                Klimatkvitto
+            </KlimatKvitto> */}
+
 
         </MainContainer>
     )
@@ -310,6 +311,9 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 />
             </SearchBox>
             <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} />
+            <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
+                Klimatkvitto
+            </KlimatKvitto>
 
         </>
     );
