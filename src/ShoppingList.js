@@ -94,12 +94,23 @@ const ItemSpan = styled.span`
 `
 
 const SpanButton = styled.span`
+    display: flex;
+    align-items: center;
     cursor: pointer;
-    padding: 5px;
     color: #353535;
+    font-weight: 400;
+    font-size: medium;
+    margin-left: 30px;
     :hover{
         color: #110b11;
     }
+`
+
+const MyInfoIcon = styled(InfoIcon)`
+    padding: 3px 10px;
+`
+const MyLoopIcon = styled(LoopIcon)`
+    padding: 3px 10px;
 `
 
 const QuantityContainerSpan = styled.span`
@@ -132,6 +143,9 @@ const KlimatKvitto = styled.div`
 const ExpandIconContainer = styled.span`
     position: absolute;
     right: 10px;
+`
+const KlimatInfoSection = styled.span`
+    display: ${props => props.expandKvitto ? 'block' : 'none'};
 `
 
 
@@ -244,6 +258,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
     const [myshoppingList, setMyShoppingList] = useState([]);
     const [expandKvitto, setExpandKvitto] = useState(false);
+    const [greenPointsTotal, setGreenPointsTotal] = useState(null);
 
 
     var itemExist = false;
@@ -257,6 +272,13 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 ...myshoppingList,
                 listObjArr
             );
+
+            //Set total green points of the items that is on selected list
+            let totalGreenPoints = myshoppingList.reduce(function (accumulator, item) {
+                return accumulator + item.green_points
+            }, 0);
+
+            setGreenPointsTotal(Math.round((totalGreenPoints / listObjArr.length) * 20));
 
         }
         return () => {
@@ -278,6 +300,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 selectedItem
             ]);
             itemExist = false;
+
             /* console.log(myshoppingList) */
             ////1.Save the selected item to the db if the item not exist already
             const db = getDatabase();
@@ -333,6 +356,12 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
             {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} onClick={onClickKlimatKvitto} expandKvitto={expandKvitto}>
                 Klimatkvitto
                 <ExpandIconContainer>{expandKvitto ? <ExpandMoreIcon /> : <ExpandLessIcon />}</ExpandIconContainer>
+                <KlimatInfoSection expandKvitto={expandKvitto}>
+                    <h1>This is your total green points</h1>
+                    <h2>85%</h2>
+                    <h3>Bra jobbat </h3>
+                    <h1>Total green points: {greenPointsTotal} %</h1>
+                </KlimatInfoSection>
             </KlimatKvitto>}
 
         </>
@@ -454,9 +483,8 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                             item: item
                         }
                     }}>
-                        <SpanButton> <InfoIcon /> Klimat påverkan</SpanButton>
+                        <SpanButton> <MyInfoIcon /> Klimat påverkan</SpanButton>
                     </StyledLink>
-                    <br />
                     <StyledLink to={{
                         pathname: "/alternative",
                         state: {
@@ -465,7 +493,7 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                             listName: listName
                         }
                     }}>
-                        <SpanButton><LoopIcon /> Alternativ på hållbara varor</SpanButton>
+                        <SpanButton><MyLoopIcon /> Alternativ på hållbara varor</SpanButton>
                     </StyledLink>
 
                 </section>
