@@ -274,7 +274,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
             );
 
             //Set total green points of the items that is on selected list
-            let totalGreenPoints = myshoppingList.reduce(function (accumulator, item) {
+            let totalGreenPoints = listObjArr.reduce(function (accumulator, item) {
                 return accumulator + item.green_points
             }, 0);
 
@@ -358,8 +358,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                 <ExpandIconContainer>{expandKvitto ? <ExpandMoreIcon /> : <ExpandLessIcon />}</ExpandIconContainer>
                 <KlimatInfoSection expandKvitto={expandKvitto}>
                     <h1>This is your total green points</h1>
-                    <h2>85%</h2>
-                    <h3>Bra jobbat </h3>
+                    {greenPointsTotal > 80 ? <h3> Bra jobbat </h3> : <h3> Finns förbättring </h3>}
                     <h1>Total green points: {greenPointsTotal} %</h1>
                 </KlimatInfoSection>
             </KlimatKvitto>}
@@ -409,8 +408,13 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
 
 
 
-    const handleOnClickExpand = () => {
-        setExpand(!expand);
+    const handleOnClickExpand = (e) => {
+        if (e.target.closest('input')) {
+            return;
+        } else {
+            setExpand(!expand);
+        }
+
     }
 
     const handleChangeCheckbox = (e) => {
