@@ -3,7 +3,6 @@ import { doSignOut } from "./firebase"
 import { Link, useHistory } from 'react-router-dom'
 import { AuthUserContext } from './App'
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import { DisabledByDefaultRounded } from '@mui/icons-material';
 import styled from 'styled-components';
 import { StyledLink } from './GlobalStyles';
 import HandsImage from './img/hands.svg'
@@ -11,6 +10,7 @@ import { devices } from './GlobalStyles';
 import ListIcon from '@mui/icons-material/List';
 import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const HomeContainer = styled.div`
     display: flex;
@@ -76,6 +76,35 @@ const MoreIcon = styled(MoreHorizIcon)`
     position: absolute;
     right: 25px;
     color: #353535;
+`
+
+const SignoutIcon = styled(ExitToAppIcon)`
+    color: #B9B9B9;
+    :hover{
+        color: #121212;
+    }
+    padding-right: 3px;
+`
+
+const SignoutButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    margin: 10px 0;
+    color: #B9B9B9;
+    background-color: transparent;
+    :hover{
+        color: #121212;
+    }
+`
+
+const ButtonContainer = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-right: 20px;
+    
 `
 
 
@@ -145,8 +174,9 @@ export default function Home(props) {
 
     return (
         <HomeContainer>
-            {/* <h3>Hello home component{props.currentUser}</h3> */}
-            <button onClick={() => handleSignOut()}>Sign out</button>
+            <ButtonContainer>
+                <SignoutButton onClick={() => handleSignOut()} > <SignoutIcon fontSize="small" /> Sign out</SignoutButton>
+            </ButtonContainer>
 
             {/* <StyledSpan> */}
             <NewListButton to="/create-new-list"> <PlusIcon /> Ny lista</NewListButton>

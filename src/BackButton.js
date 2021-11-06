@@ -10,7 +10,7 @@ const Button = styled.button`
     font-size: 15px;
     border: none;
     background-color: transparent;
-    
+    margin-top: 20px;
 `
 
 export default function BackButton() {

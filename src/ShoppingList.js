@@ -2,8 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Select from 'react-select'
 import styled, { keyframes } from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -341,8 +339,6 @@ const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, 
 
         } else {
             itemExist = true;
-
-            /* swal(`${selectedItem.label}`, "${selectedItem.label} finns redan i inköpslistan", "warning"); */
 
             swal({
                 title: `${selectedItem.label}`,
