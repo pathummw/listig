@@ -17,7 +17,8 @@ import { StyledLink } from './GlobalStyles';
 import InfoIcon from '@mui/icons-material/Info';
 import BackButton from './BackButton';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import SnackbarComponent from './SnackbarComponent'
+import SnackbarComponent from './SnackbarComponent';
+import swal from 'sweetalert';
 
 
 
@@ -340,7 +341,15 @@ const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, 
 
         } else {
             itemExist = true;
-            alert("Item  already exists")
+
+            /* swal(`${selectedItem.label}`, "${selectedItem.label} finns redan i inköpslistan", "warning"); */
+
+            swal({
+                title: `${selectedItem.label}`,
+                text: "finns redan i inköpslistan",
+                icon: "info",
+                button: "Okej",
+            });
         }
 
 
@@ -521,11 +530,6 @@ const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, messa
 
                 </section>
             </Li>
-
-            {/* <SnackbarComponent message="Pathum" /> */}
-            {/* Display Snackbar component */}
-            {/* {message && <SnackbarComponent message={message} />
-            } */}
 
 
         </div>
