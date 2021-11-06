@@ -39,14 +39,11 @@ const Ul = styled.ul`
 `
 
 const glowing = keyframes`
- 0% { box-shadow: 0 0 1px 0.5px #f3453e}
- 50% { box-shadow: 0 0 5px 0.5px #f3453e}
- 100% { box-shadow: 0 0 1px 0.5px #f3453e}
+ 0% { box-shadow: 0 0 1px 0.5px #EDE641}
+ 50% { box-shadow: 0 0 5px 0.5px #EDE641}
+ 100% { box-shadow: 0 0 1px 0.5px #EDE641}
 `
 const anm = keyframes`
- /* 0% { box-shadow: 0 0 8px 1px #3ef379}
- 50% { box-shadow: 0 0 15px 10px #3ef379}
- 100% { box-shadow: 0 0 8px 1px #3ef379} */
 `
 const Li = styled.li`
     /* display: flex; */
@@ -62,10 +59,10 @@ const Li = styled.li`
     animation-name: ${props => props.green_points < 3 ? glowing : anm};
     animation-duration: 1s;
     animation-iteration-count: infinite;
-    &:section{
+    /* &:section{
         text-decoration: none;
         background-color: red;
-    }
+    } */
     transition: 1s;
     position: relative;  //To set quantity and expand components relative to the Li
     ${props => {
