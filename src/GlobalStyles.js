@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+
 
 const sizes = {
     iPhone5: '320px',

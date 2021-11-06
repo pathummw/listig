@@ -16,8 +16,8 @@ import { saveItem, deleteItem } from './firebase'
 import { StyledLink } from './GlobalStyles';
 import InfoIcon from '@mui/icons-material/Info';
 import BackButton from './BackButton';
-
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import SnackbarComponent from './SnackbarComponent'
 
 
 
@@ -162,6 +162,10 @@ export default function ShoppingList() {
     const [listObjArr, setListObjectArr] = useState([]);
     const [groceryItemsArray, setGroceryItemsArray] = useState([]);
 
+    //Used to display snackbar messages
+    const [message, setMessage] = useState('');
+    const [severity, setSeverity] = useState("");
+
 
     useEffect(() => {
 
@@ -171,15 +175,15 @@ export default function ShoppingList() {
         //When user create a new shopping list, save the empty list with the Shopping list name to db
         const db = getDatabase();
         if (newList && isMounted) {
-            console.log(`Shopping List created with the name ${listName} `)
+            //console.log(`Shopping List created with the name ${listName} `)
             set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
                 time_stamp: Date.now()
             })
                 .then(() => {
-                    console.log("Created a new Shopping list successfully")
+                    //console.log("Created a new Shopping list successfully")
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setMessage(error);
                 })
             return () => {
             }
@@ -231,7 +235,18 @@ export default function ShoppingList() {
             isMounted = false;
         }
 
-    }, [])
+    }, []);
+
+    const handleSnackbar = (message, severity) => {
+        setMessage(message);
+        setSeverity(severity);
+    };
+
+    const clearSnackbar = () => {
+        setMessage('');
+        setSeverity('');
+    }
+
 
 
     return (
@@ -242,18 +257,19 @@ export default function ShoppingList() {
 
             <H1>{listName}</H1>
 
-            <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} />
+            <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} handleSnackbar={handleSnackbar} message={message} />
 
             {/* <KlimatKvitto color={listObjArr.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
                 Klimatkvitto
             </KlimatKvitto> */}
 
+            {message && <SnackbarComponent message={message} severity={severity} clearSnackbar={clearSnackbar} />}
 
         </MainContainer>
     )
 }
 
-const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
+const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, message }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
@@ -316,10 +332,10 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
 
             })
                 .then(() => {
-                    console.log("Item saved successfully")
+                    handleSnackbar("Varan har sparats", 'success')
                 })
                 .catch((error) => {
-                    console.log(error);
+                    handleSnackbar('Något gick fel. Försök igen', 'error');
                 })
 
         } else {
@@ -349,7 +365,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} />
+            <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} handleSnackbar={handleSnackbar} message={message} />
 
             {/* Render the Klimatkvitto comp. only if there is items on shopping list && send bg color to styled components accroding to green points 
             => if there is at least one item that green_points are below 3, set bg yellow*/}
@@ -367,7 +383,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr }) => {
     );
 }
 
-const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted }) => {
+const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted, handleSnackbar, message }) => {
 
 
     return (
@@ -376,7 +392,7 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted
             <Ul>
                 {myshoppingList && myshoppingList?.map(item => (
 
-                    <Item key={item.id} item={item} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} />
+                    <Item key={item.id} item={item} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} handleSnackbar={handleSnackbar} message={message} />
 
                 ))}
 
@@ -387,23 +403,24 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted
     );
 }
 
-const Item = ({ item, authUserId, listName, handleDeleted }) => {
+const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, message }) => {
 
     const [expand, setExpand] = useState(false);
     const [checked, setChecked] = useState(false);
     const [greenPoints, setGreenPoints] = useState(null);
 
+
+
     useEffect(() => {
         if (item) {
             setChecked(item.isSelected);
             setGreenPoints(item.green_points);
-
-            console.log("use effect item")
         }
         return () => {
             //cleanup
         }
     }, [])
+
 
 
 
@@ -429,10 +446,10 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
             isSelected: isSelected
         })
             .then(() => {
-                console.log("Item updated successfully")
+                handleSnackbar('Varan har uppdaterats', 'success')
             })
             .catch((error) => {
-                console.log(error);
+                handleSnackbar('Något gick fel. Försök igen', 'error');
             })
         return () => {
         }
@@ -447,11 +464,12 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
 
             remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
                 .then(() => {
-                    console.log("Item deleted")
+                    /* console.log("Item deleted") */
+                    handleSnackbar('Varan har tagits bort från listan.', 'success');
                     handleDeleted(item.id); ///Callback function to remove deleted item li from the list
                 })
                 .catch((error) => {
-                    console.log(error);
+                    handleSnackbar('Något gick fel. Försök igen', 'error');
                 })
             return () => {
             }
@@ -461,10 +479,11 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
                 quantity: quantity
             })
                 .then(() => {
-                    console.log("Quantity updated successfully")
+                    /* console.log("Quantity updated successfully") */
+                    handleSnackbar('Kvantiteten har uppdaterats', 'success');
                 })
                 .catch((error) => {
-                    console.log(error);
+                    handleSnackbar('Något gick fel. Försök igen', 'error');
                 })
             return () => {
             }
@@ -502,6 +521,12 @@ const Item = ({ item, authUserId, listName, handleDeleted }) => {
 
                 </section>
             </Li>
+
+            {/* <SnackbarComponent message="Pathum" /> */}
+            {/* Display Snackbar component */}
+            {/* {message && <SnackbarComponent message={message} />
+            } */}
+
 
         </div>
     )

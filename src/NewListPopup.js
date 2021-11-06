@@ -36,6 +36,7 @@ const Button = styled.button`
     text-transform: uppercase;
     width: 100px;
     margin: 10px;
+    cursor: pointer;
 
     ${props => props.create && css`
     background: #26AE60;
