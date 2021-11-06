@@ -8,6 +8,8 @@ import { Link, useHistory } from 'react-router-dom';
 import Alternatives from './img/alternatives.svg'
 import { devices } from './GlobalStyles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import swal from 'sweetalert';
+
 
 const Container = styled.div`
     display: flex; 
@@ -96,13 +98,20 @@ export default function Alternative() {
     }, [])
 
     const handleChangeCheckbox = (data) => {
-        console.log(data)
-        saveItem(authUserId, listName, data); //Send selected item to firebase save function to save to db
-
+        //Send selected item to firebase save function to save to db
+        saveItem(authUserId, listName, data)
         //Delete item after slecting the alternative item
         deleteItem(authUserId, listName, item);
 
+        swal({
+            title: `${item.label} bytt ut med`,
+            text: `${data.label}`,
+            icon: "success",
+            button: "Okej",
+        });
+
     }
+
 
 
     return (

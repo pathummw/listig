@@ -42,3 +42,7 @@ export const StyledLink = styled(Link)`
 Sub heading 17px - Bold
 Normal text 15px - Light
 Övrig text mindre 15px - Thin italic */
+
+/* Roboto  // Defaults to weight 400.
+Weights: [100,300,400,500,700,900]
+Styles: [italic,normal] */
