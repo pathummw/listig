@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { doSignOut } from "./firebase"
 import { Link, useHistory } from 'react-router-dom'
-import { AuthUserContext } from './App'
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import styled from 'styled-components';
 import { StyledLink } from './GlobalStyles';
@@ -11,6 +10,7 @@ import ListIcon from '@mui/icons-material/List';
 import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { AuthContext } from "./Auth.js";
 
 const HomeContainer = styled.div`
     display: flex;
@@ -110,10 +110,9 @@ const ButtonContainer = styled.div`
 
 export default function Home(props) {
 
-    const [error, setError] = useState('');
+    const { currentUser } = useContext(AuthContext);
     const [lists, setLists] = useState([]);
     const history = useHistory();
-    const authUserId = useContext(AuthUserContext);
 
     const [listNames, setListNames] = useState([]);
     const [listData, setListData] = useState([]);
@@ -123,10 +122,11 @@ export default function Home(props) {
 
         setLLoading(true);
 
+        console.log(currentUser)
         let isMounted = true;
         //Get all the saved lists from db that belongs to signed in user
         const db = getDatabase();
-        const dbRef = ref(db, 'users/' + authUserId + '/lists/');
+        const dbRef = ref(db, 'users/' + currentUser + '/lists/');
 
 
         let childKeysArr = [];
@@ -142,8 +142,6 @@ export default function Home(props) {
             });
 
             if (isMounted) {
-                /* setListNames(childKeysArr);  *///Set the list names 
-                /* setListData(childDataArr); */
                 setLists(snapshot.val());
             }
 
@@ -160,13 +158,10 @@ export default function Home(props) {
 
 
     async function handleSignOut() {
-        /* setError('') */
-
         try {
             await doSignOut()
             history.push('/signin')
         } catch {
-            /* setError('Failed to sign out') */
             console.log('Failed to sign out')
         }
 
@@ -178,9 +173,7 @@ export default function Home(props) {
                 <SignoutButton onClick={() => handleSignOut()} > <SignoutIcon fontSize="small" /> Sign out</SignoutButton>
             </ButtonContainer>
 
-            {/* <StyledSpan> */}
             <NewListButton to="/create-new-list"> <PlusIcon /> Ny lista</NewListButton>
-            {/* </StyledSpan> */}
 
             {loading && <div>Loading ...</div>}
 

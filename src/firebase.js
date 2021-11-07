@@ -45,21 +45,6 @@ export function signup(email, password) {
 }
 
 
-/* import { getDatabase, ref, set } from "firebase/database";
-
-function writeUserData(userId, name, email, imageUrl) {
-  const db = getDatabase();
-  set(ref(db, 'users/' + userId), {
-    username: name,
-    email: email,
-    profile_picture : imageUrl
-  });
-}
- */
-
-
-
-
 
 export function signin(email, password) {
 
@@ -81,29 +66,16 @@ export function signin(email, password) {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+
+            console.log(errorCode)
+            console.log(errorMessage)
         })
 }
 //To get the current user, when user isn't signed in ,return null
+export function User() {
+    return auth.currentUser;
+}
 const user = auth.currentUser;
-
-
-
-//This onAuthStateChanged called automatically after signin fun. and sign out func.
-/* onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("User signed In: OnAuthstatgeChanged")
-        const uid = user.uid;
-
-        console.log("UID: " + uid)
-        setUserId(uid)
-
-    } else {
-        //User signed out
-        console.log("User signed out: OnAuthstatgeChanged")
-
-    }
-}) */
-
 
 
 
@@ -121,10 +93,10 @@ export function doSignOut() {
 
 //update list items 2021/10/27
 
-export function saveItem(authUserId, listName, item) {
+export function saveItem(currentUser, listName, item) {
 
     const db = getDatabase();
-    set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+    set(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + item.value), {
         id: item.id,
         label: item.label,
         green_points: item.green_points,
@@ -142,11 +114,11 @@ export function saveItem(authUserId, listName, item) {
         })
 }
 
-export function deleteItem(authUserId, listName, item) {
+export function deleteItem(currentUser, listName, item) {
 
     const db = getDatabase();
 
-    remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
+    remove(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + item.value))
         .then(() => {
             console.log("Item deleted")
         })

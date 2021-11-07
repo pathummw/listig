@@ -6,17 +6,16 @@ import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LoopIcon from '@mui/icons-material/Loop';
 import { getDatabase, ref, set, onValue, update, remove } from "firebase/database";
-import { AuthUserContext } from './App';
-import { Link } from 'react-router-dom';
 import QuantityComponent from './QuantityComponent';
 import { GROCERY_ITEMS_DATA } from './data'
-import { saveItem, deleteItem } from './firebase'
 import { StyledLink } from './GlobalStyles';
 import InfoIcon from '@mui/icons-material/Info';
 import BackButton from './BackButton';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SnackbarComponent from './SnackbarComponent';
 import swal from 'sweetalert';
+import { AuthContext } from "./Auth.js";
+
 
 
 
@@ -151,9 +150,7 @@ export default function ShoppingList() {
     const listId = location.state?.id;
     const newList = location.state?.new_list;
 
-
-
-    const authUserId = useContext(AuthUserContext);
+    const { currentUser } = useContext(AuthContext);
 
     const [listObjArr, setListObjectArr] = useState([]);
     const [groceryItemsArray, setGroceryItemsArray] = useState([]);
@@ -172,7 +169,7 @@ export default function ShoppingList() {
         const db = getDatabase();
         if (newList && isMounted) {
             //console.log(`Shopping List created with the name ${listName} `)
-            set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/'), {
+            set(ref(db, 'users/' + currentUser + '/lists/' + listName + '/'), {
                 time_stamp: Date.now()
             })
                 .then(() => {
@@ -187,7 +184,7 @@ export default function ShoppingList() {
 
             //If list is alreday created, avoid creating it
             //If so,load the data from db of the already created list
-            const dbRef = ref(db, 'users/' + authUserId + '/lists/' + listName);
+            const dbRef = ref(db, 'users/' + currentUser + '/lists/' + listName);
 
             onValue(dbRef, (snapshot) => {
                 /* snapshot.forEach((childSnapshot) => {
@@ -253,7 +250,7 @@ export default function ShoppingList() {
 
             <H1>{listName}</H1>
 
-            <SearchBar options={groceryItemsArray} listName={listName} authUserId={authUserId} listObjArr={listObjArr} handleSnackbar={handleSnackbar} message={message} />
+            <SearchBar options={groceryItemsArray} listName={listName} currentUser={currentUser} listObjArr={listObjArr} handleSnackbar={handleSnackbar} message={message} />
 
             {/* <KlimatKvitto color={listObjArr.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
                 Klimatkvitto
@@ -265,7 +262,7 @@ export default function ShoppingList() {
     )
 }
 
-const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, message }) => {
+const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar, message }) => {
 
 
     const [myshoppingList, setMyShoppingList] = useState([]);
@@ -316,7 +313,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, 
             /* console.log(myshoppingList) */
             ////1.Save the selected item to the db if the item not exist already
             const db = getDatabase();
-            set(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + selectedItem.value), {
+            set(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + selectedItem.value), {
                 id: selectedItem.id,
                 label: selectedItem.label,
                 green_points: selectedItem.green_points,
@@ -367,7 +364,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, 
                     onChange={handleChange}
                 />
             </SearchBox>
-            <ShoppingItemsList myshoppingList={myshoppingList} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} handleSnackbar={handleSnackbar} message={message} />
+            <ShoppingItemsList myshoppingList={myshoppingList} currentUser={currentUser} listName={listName} handleDeleted={handleDeleted} handleSnackbar={handleSnackbar} message={message} />
 
             {/* Render the Klimatkvitto comp. only if there is items on shopping list && send bg color to styled components accroding to green points 
             => if there is at least one item that green_points are below 3, set bg yellow*/}
@@ -385,7 +382,7 @@ const SearchBar = ({ options, listName, authUserId, listObjArr, handleSnackbar, 
     );
 }
 
-const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted, handleSnackbar, message }) => {
+const ShoppingItemsList = ({ myshoppingList, currentUser, listName, handleDeleted, handleSnackbar, message }) => {
 
 
     return (
@@ -394,7 +391,7 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted
             <Ul>
                 {myshoppingList && myshoppingList?.map(item => (
 
-                    <Item key={item.id} item={item} authUserId={authUserId} listName={listName} handleDeleted={handleDeleted} handleSnackbar={handleSnackbar} message={message} />
+                    <Item key={item.id} item={item} currentUser={currentUser} listName={listName} handleDeleted={handleDeleted} handleSnackbar={handleSnackbar} message={message} />
 
                 ))}
 
@@ -405,7 +402,7 @@ const ShoppingItemsList = ({ myshoppingList, authUserId, listName, handleDeleted
     );
 }
 
-const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, message }) => {
+const Item = ({ item, currentUser, listName, handleDeleted, handleSnackbar, message }) => {
 
     const [expand, setExpand] = useState(false);
     const [checked, setChecked] = useState(false);
@@ -444,7 +441,7 @@ const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, messa
     const updateListItem = (isSelected) => {
         const db = getDatabase();
 
-        update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+        update(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + item.value), {
             isSelected: isSelected
         })
             .then(() => {
@@ -464,7 +461,7 @@ const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, messa
 
         if (quantity === 0) { //Delete an item from the list when user select quantity as 0
 
-            remove(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value))
+            remove(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + item.value))
                 .then(() => {
                     /* console.log("Item deleted") */
                     handleSnackbar('Varan har tagits bort från listan.', 'success');
@@ -477,7 +474,7 @@ const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, messa
             }
         } else {
 
-            update(ref(db, 'users/' + authUserId + '/lists/' + listName + '/' + item.value), {
+            update(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + item.value), {
                 quantity: quantity
             })
                 .then(() => {
@@ -514,7 +511,7 @@ const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, messa
                         pathname: "/alternative",
                         state: {
                             item: item,
-                            authUserId: authUserId,
+                            currentUser: currentUser,
                             listName: listName
                         }
                     }}>
@@ -529,6 +526,3 @@ const Item = ({ item, authUserId, listName, handleDeleted, handleSnackbar, messa
     )
 }
 
-
-//Home eken link eka click kalata ShoppingList eka rerender wenne nee,,, mokak hari ShoppingList con.log ekak wenas karala save kalahama re-render wenawa,
-//Link eka click kalama state ekak wenas karala re-render ???

@@ -1,12 +1,14 @@
-import { useRef, useState, createContext } from 'react'
+import { useRef, useState, createContext, useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import { signin } from "./firebase"
 import styled from 'styled-components';
 import { devices } from './GlobalStyles';
 import BackgroundImage from './img/trees.svg'
 
-/* const history = useHistory() */
-/* const AuthUserContext = createContext(); */
+import { Redirect } from "react-router";
+import { AuthContext } from "./Auth.js";
+
+
 
 const SignInContainer = styled.div`
     background-color: #DEDEDE;
@@ -71,13 +73,12 @@ const Button = styled.button`
 `
 
 export default function SignIn() {
-    const emailRef = useRef()
-    const passwordRef = useRef()
+    const emailRef = useRef('email')
+    const passwordRef = useRef('lösenord')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory()
 
-    const [authUid, setAuthUid] = useState();
 
 
     async function handleSubmit(e) {
@@ -94,6 +95,11 @@ export default function SignIn() {
         /* setLoading(false) */
     }
 
+    const { currentUser } = useContext(AuthContext);
+
+    if (currentUser) {
+        return <Redirect to="/" />;
+    }
 
 
     return (
@@ -105,14 +111,13 @@ export default function SignIn() {
                 <Input type="password" ref={passwordRef} />
                 <Button>LOGGA IN</Button>
             </Form>
-            {/* <span>{sessionStorage.getItem('authUser')}</span> */}
             <span>Need an account? <Link to="/signup">Sign up</Link> </span>
 
         </SignInContainer>
     )
 
-    /*  export default AuthUserContext; */
 }
 
-/* export { AuthUserContext }; */
+
+
 
