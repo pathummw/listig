@@ -134,7 +134,33 @@ const KlimatKvitto = styled.div`
     bottom: 5px;
     color:  ${props => props.color == '#EDE641' ? '#000000' : '#FFFFFF'};
     height: ${props => props.expandKvitto ? '90vh' : ''};
+    h1{
+        text-align: center; 
+        font-weight: 400;
+        font-size: larger;
+        margin: 50px 0;
+    }
+    h3{
+        text-align: center;
+        font-style: italic;
+        font-weight: 400;
+        font-size: medium;
+        margin: 50px 0;
+    }
 `
+
+const PointsSpan = styled.span`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: whitesmoke;
+    color: black; 
+    margin: 50px auto;
+`
+
 const ExpandIconContainer = styled.span`
     position: absolute;
     right: 10px;
@@ -252,10 +278,6 @@ export default function ShoppingList() {
 
             <SearchBar options={groceryItemsArray} listName={listName} currentUser={currentUser} listObjArr={listObjArr} handleSnackbar={handleSnackbar} message={message} />
 
-            {/* <KlimatKvitto color={listObjArr.filter(x => x.green_points < 3).length >= 1 ? 'yellow' : 'green'} >
-                Klimatkvitto
-            </KlimatKvitto> */}
-
             {message && <SnackbarComponent message={message} severity={severity} clearSnackbar={clearSnackbar} />}
 
         </MainContainer>
@@ -368,15 +390,18 @@ const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar,
 
             {/* Render the Klimatkvitto comp. only if there is items on shopping list && send bg color to styled components accroding to green points 
             => if there is at least one item that green_points are below 3, set bg yellow*/}
-            {myshoppingList && !!myshoppingList.length && <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} onClick={onClickKlimatKvitto} expandKvitto={expandKvitto}>
-                Klimatkvitto
-                <ExpandIconContainer>{expandKvitto ? <ExpandMoreIcon /> : <ExpandLessIcon />}</ExpandIconContainer>
-                <KlimatInfoSection expandKvitto={expandKvitto}>
-                    <h1>This is your total green points</h1>
-                    {greenPointsTotal > 80 ? <h3> Bra jobbat </h3> : <h3> Finns förbättring </h3>}
-                    <h1>Total green points: {greenPointsTotal} %</h1>
-                </KlimatInfoSection>
-            </KlimatKvitto>}
+            {myshoppingList && !!myshoppingList.length &&
+                <KlimatKvitto color={myshoppingList.filter(x => x.green_points < 3).length >= 1 ? '#EDE641' : '#26AE60'} onClick={onClickKlimatKvitto} expandKvitto={expandKvitto}>
+                    Klimatkvitto
+                    <ExpandIconContainer>{expandKvitto ? <ExpandMoreIcon /> : <ExpandLessIcon />}</ExpandIconContainer>
+                    <KlimatInfoSection expandKvitto={expandKvitto}>
+
+                        {greenPointsTotal > 80 ? <h3> Bra jobbat 👍 </h3> : <h3> Finns förbättring 👎 </h3>}
+                        <h1>Totalt antal gröna poäng du har tjänat : </h1>
+                        <PointsSpan>{greenPointsTotal} %</PointsSpan>
+                    </KlimatInfoSection>
+
+                </KlimatKvitto>}
 
         </>
     );
