@@ -71,6 +71,30 @@ const Button = styled.button`
     border-radius: 10px;
 
 `
+const H3 = styled.h3`
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #E6E6E6;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+    span{
+        background: #F7F7F7;
+        padding: 0 10px;
+        color: #000000;
+        font-weight: 300;
+        font-size: small;
+    }
+`
+
+const SignupSpan = styled.span`
+    font-weight: 300;
+    font-size: small;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+`
 
 export default function SignIn() {
     const emailRef = useRef('email')
@@ -110,8 +134,10 @@ export default function SignIn() {
                 <Input type="email" ref={emailRef} />
                 <Input type="password" ref={passwordRef} />
                 <Button>LOGGA IN</Button>
+                <H3><span>Eller</span></H3>
+                <SignupSpan>Behöver ett konto?&nbsp; <Link to="/signup"> &nbsp;Skapa konto </Link> </SignupSpan>
             </Form>
-            <span>Need an account? <Link to="/signup">Sign up</Link> </span>
+
 
         </SignInContainer>
     )
