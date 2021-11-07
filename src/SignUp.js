@@ -1,6 +1,71 @@
 import React, { useRef, useState } from 'react'
 import { signup } from "./firebase"
 import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components'
+import BackgroundImage from './img/trees.svg'
+import { devices } from './GlobalStyles';
+
+const SignUpContainer = styled.div`
+    background-color: #DEDEDE;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: auto;
+    background-image: url(${BackgroundImage});
+    background-repeat: no-repeat;
+    background-size: cover; 
+    @media ${devices.iPhone5}{
+        background-position: 30% 150px;
+    }
+    @media ${devices.iphone6_7_8_X}{
+        background-position: 30% 200px;
+    }
+    /* background-size: cover; */ /* Resize the background image to cover the entire container */
+`
+
+const Form = styled.form`
+    width: 65vw;
+    background: #F7F7F7;
+    text-align: left;
+    padding: 25px;
+    border-radius: 10px;
+    @media ${devices.tablet} {
+        /* margin: 10px; */
+    }
+`
+
+const Input = styled.input`
+    display: block;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    color: #000000;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-family:  Roboto;
+    background-color: #E2E2E2;
+    &:-webkit-autofill,   //to change the auto complete browser background color for inputs
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+    -webkit-transition: "background-color";
+    -webkit-transition-delay: 9999s;
+    }
+`
+
+const Button = styled.button`
+    width: 100%;
+    background: #FFD449;
+    border: 0;
+    padding: 10px 20px;
+    margin: 30px 0;
+    color: #3E3E3E;
+    border-radius: 10px;
+
+`
 
 export default function SignUp() {
 
@@ -34,15 +99,17 @@ export default function SignUp() {
 
 
     return (
-        <form onSubmit={handleSubmit}>
-            {error}
-            <input type="email" ref={emailRef} placeholder="E-mail" />
-            <input type="password" ref={passwordRef} placeholder="Password" />
-            <input type="password" ref={passwordConfirmRef} placeholder="Confirm password" />
-            <button disabled={loading} type="submit">Sign up</button>
+        <SignUpContainer>
+            <Form onSubmit={handleSubmit}>
+                {error}
+                <Input type="email" ref={emailRef} placeholder="E-mail" />
+                <Input type="password" ref={passwordRef} placeholder="Lösenord" />
+                <Input type="password" ref={passwordConfirmRef} placeholder="Bekräfta lösenord" />
+                <Button disabled={loading} type="submit">SKAPA KONTO</Button>
 
-            <span>Already have an account? <Link to="/signin">Sign in</Link> </span>
-        </form>
+                <span>Har du redan ett konto? <Link to="/signin">Logga in</Link> </span>
+            </Form>
+        </SignUpContainer>
     )
 }
 
