@@ -53,7 +53,7 @@ const PercentageContainer = styled.div`
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    background-color: ${props => props.percentage > 50 ? 'green' : 'red'};
+    background-color: ${props => props.percentage > 50 ? '#26AE60' : '#DA0909'};
     position: absolute;
     right: 80px;
     align-items: center;
@@ -61,7 +61,8 @@ const PercentageContainer = styled.div`
     color: white;
     font-size: large;
     span{
-        font-size: 0.6rem;
+        font-size: 1rem;
+        font-weight: 300;
     }
 `
 const H1 = styled.h1`
