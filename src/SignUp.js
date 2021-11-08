@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components'
 import BackgroundImage from './img/trees.svg'
 import { devices } from './GlobalStyles';
+import swal from 'sweetalert';
 
 const SignUpContainer = styled.div`
     background-color: #DEDEDE;
@@ -79,22 +80,46 @@ export default function SignUp() {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError('Password do not match')
+        if (validateEmail(emailRef.current.value) && passwordRef.current.value !== passwordConfirmRef.current.value) {
+            swal({
+                title: "Lösenordet matchar inte",
+                text: "Försök igen",
+                icon: "error",
+                button: "Okej",
+            });
+
+
+            passwordRef.current.value = '';
+            passwordConfirmRef.current.value = '';
+
+        } else {
+            try {
+                setLoading(true)
+                await signup(emailRef.current.value, passwordRef.current.value)
+                history.push('/')
+            } catch {
+                swal({
+                    title: "Det gick inte att skapa ett konto",
+                    text: "Försök igen",
+                    icon: "error",
+                    button: "Okej",
+                });
+            }
         }
 
-        try {
-            setError('')
-            setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
-            history.push('/')
-        } catch {
-            setError('Failed to create an account')
-        }
+
 
         setLoading(false)
 
+    }
 
+    const validateEmail = (email) => {
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (email.match(validRegex)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
