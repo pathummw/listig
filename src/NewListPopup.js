@@ -29,7 +29,7 @@ const Button = styled.button`
     color: white;
     border: none;
     text-align: center;
-    font-family: Roboto;
+    font-family: "Roboto";
     border-radius: 10px;
     padding: 5px 10px;
     text-transform: uppercase;

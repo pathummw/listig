@@ -4,9 +4,9 @@ import { signin } from "./firebase"
 import styled from 'styled-components';
 import { devices } from './GlobalStyles';
 import BackgroundImage from './img/trees.svg'
-
 import { Redirect } from "react-router";
 import { AuthContext } from "./Auth.js";
+import swal from 'sweetalert';
 
 
 
@@ -39,7 +39,6 @@ const Form = styled.form`
     border-radius: 10px;
     margin-bottom: 60px;
     @media ${devices.tablet} {
-        /* margin: 10px; */
     }
 `
 
@@ -52,7 +51,7 @@ const Input = styled.input`
     color: #000000;
     border-radius: 10px;
     margin: 20px 0;
-    font-family:  Roboto;
+    font-family:  "Roboto";
     background-color: #E2E2E2;
     &:-webkit-autofill,   //to change the auto complete browser background color for inputs
     &:-webkit-autofill:hover,
@@ -99,7 +98,7 @@ const SignupSpan = styled.span`
 `
 
 const Listig = styled.h1`
-    font-family: 'Oxygen';
+    font-family: "Ubuntu";
     margin-bottom: 50px;
     font-weight: 400;
     font-size: 3rem;
@@ -120,12 +119,16 @@ export default function SignIn() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            /*  setError('')
-             setLoading(true) */
             await signin(emailRef.current.value, passwordRef.current.value)
             history.push('/')
         } catch {
-            /* setError("Failed to sign in") */
+            swal({
+                title: "Något gick fel",
+                text: "Försök igen",
+                icon: "error",
+                button: "Okej",
+            });
+
         }
 
         /* setLoading(false) */

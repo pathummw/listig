@@ -38,10 +38,6 @@ const Ul = styled.ul`
 `
 
 const glowing = keyframes`
- /* 0% { box-shadow: 0 0 1px 0.5px #EDE641}
- 50% { box-shadow: 0 0 5px 0.5px #EDE641}
- 100% { box-shadow: 0 0 1px 0.5px #EDE641} */
- 
  0% {
     border: solid 2px #FFFF00;
     box-shadow: 0 0 3px #FFFF00;
@@ -61,7 +57,7 @@ const Li = styled.li`
     background-color: #E1E1E1;
     color: #353535;
     font-weight: 500;
-    font-family: Roboto;
+    font-family: "Roboto";
     padding: 5px;
     margin: 7px auto;
     border-radius: 10px;
@@ -258,7 +254,6 @@ export default function ShoppingList() {
             });
         }
 
-        /* console.log(openedListItemsObj) */
         return () => {
             isMounted = false;
         }

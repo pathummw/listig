@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getDatabase, ref, set, remove } from "firebase/database";
-
+import swal from 'sweetalert';
 
 
 
@@ -28,8 +28,6 @@ export function signup(email, password) {
         .then((userCredential) => {
             //Signed in
             const user = userCredential.user;
-            console.log(user)
-            /* console.log(auth) */
             const db = getDatabase();
             set(ref(db, 'users/' + user.uid), {
                 /* username: name, */
@@ -40,7 +38,13 @@ export function signup(email, password) {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorMessage)
+
+            swal({
+                title: `${errorCode}`,
+                text: `${errorMessage}`,
+                icon: "error",
+                button: "Okej",
+            });
         })
 }
 
@@ -50,16 +54,7 @@ export function signin(email, password) {
 
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            //Signed in
-            console.log("Signed in")
-            /* const user = userCredential.user; */
-            /* console.log("user: " + user) */
-
-
-            /* if (user !== null) {
-                console.log(user.email)
-                console.log(user.uid)
-            } */
+            //console.log("Signed in")
             /* sessionStorage.setItem('authUser', auth.currentUser.uid); */  //Save the signed in user id in session storage
 
         })
@@ -67,15 +62,19 @@ export function signin(email, password) {
             const errorCode = error.code;
             const errorMessage = error.message;
 
-            console.log(errorCode)
-            console.log(errorMessage)
+            swal({
+                title: `${errorCode}`,
+                text: `${errorMessage}`,
+                icon: "error",
+                button: "Okej",
+            });
         })
 }
 //To get the current user, when user isn't signed in ,return null
 export function User() {
     return auth.currentUser;
 }
-const user = auth.currentUser;
+
 
 
 
@@ -84,10 +83,18 @@ export function doSignOut() {
         // Remove all saved data from sessionStorage
         /* sessionStorage.clear(); */
         // Sign-out successful.
-        console.log("Sign-out successful")
+        swal({
+            title: "Loggade ut",
+            icon: "success",
+            button: "Okej",
+        });
     }).catch((error) => {
         // An error happened.
-        console.log("Erro Sign-out")
+        swal({
+            title: `${error}`,
+            icon: "error",
+            button: "Okej",
+        });
     });
 }
 
@@ -107,10 +114,14 @@ export function saveItem(currentUser, listName, item) {
         isSelected: false
     })
         .then(() => {
-            console.log("Item saved successfully")
+            //console.log("Item saved successfully")
         })
         .catch((error) => {
-            console.log(error);
+            swal({
+                title: `${error}`,
+                icon: "error",
+                button: "Okej",
+            });
         })
 }
 
@@ -120,10 +131,14 @@ export function deleteItem(currentUser, listName, item) {
 
     remove(ref(db, 'users/' + currentUser + '/lists/' + listName + '/' + item.value))
         .then(() => {
-            console.log("Item deleted")
+            //console.log("Item deleted")
         })
         .catch((error) => {
-            console.log(error);
+            swal({
+                title: `${error}`,
+                icon: "error",
+                button: "Okej",
+            });
         })
 }
 

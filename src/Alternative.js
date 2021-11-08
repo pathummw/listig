@@ -4,7 +4,7 @@ import { GROCERY_ITEMS_DATA } from './data'
 import Checkbox from '@mui/material/Checkbox';
 import styled from 'styled-components'
 import { saveItem, deleteItem } from './firebase';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Alternatives from './img/alternatives.svg'
 import { devices } from './GlobalStyles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -19,7 +19,6 @@ const Container = styled.div`
     background-repeat: no-repeat;
     background-size: 60%; 
     @media ${devices.iPhone5}{
-        /* background-position: bottom; */
         background-position: 50% 60vh;
     }
     margin: 0 20px;
@@ -101,19 +100,15 @@ export default function Alternative() {
 
     const handleChangeCheckbox = (data) => {
         //Send selected item to firebase save function to save to db
-        console.log(data)
         saveItem(currentUser, listName, data)
-        //Delete item after slecting the alternative item
+        //Delete item after slecting the alternative item  
         deleteItem(currentUser, listName, item);
-        console.log(item)
-
-        /* swal({
-            title: `${item.label} bytt ut med`,
-            text: `${data.label}`,
+        swal({
+            title: `${data.label} ersatt istället för`,
+            text: `${item.label}`,
             icon: "success",
             button: "Okej",
-        }); */
-
+        });
     }
 
 

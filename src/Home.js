@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { doSignOut } from "./firebase"
 import { Link, useHistory } from 'react-router-dom'
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import styled from 'styled-components';
 import { StyledLink } from './GlobalStyles';
 import HandsImage from './img/hands.svg'
@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { AuthContext } from "./Auth.js";
+import swal from 'sweetalert';
 
 const HomeContainer = styled.div`
     display: flex;
@@ -114,15 +115,14 @@ export default function Home(props) {
     const [lists, setLists] = useState([]);
     const history = useHistory();
 
-    const [listNames, setListNames] = useState([]);
-    const [listData, setListData] = useState([]);
+    /* const [listNames, setListNames] = useState([]);
+    const [listData, setListData] = useState([]); */
     const [loading, setLLoading] = useState(false);
 
     useEffect(() => {
 
         setLLoading(true);
 
-        console.log(currentUser)
         let isMounted = true;
         //Get all the saved lists from db that belongs to signed in user
         const db = getDatabase();
@@ -162,7 +162,12 @@ export default function Home(props) {
             await doSignOut()
             history.push('/signin')
         } catch {
-            console.log('Failed to sign out')
+            swal({
+                title: "Något gick fel",
+                text: "Försök igen",
+                icon: "error",
+                button: "Okej",
+            });
         }
 
     }
@@ -175,7 +180,7 @@ export default function Home(props) {
 
             <NewListButton to="/create-new-list"> <PlusIcon /> Ny lista</NewListButton>
 
-            {/* {loading && <div>Loading ...</div>} */}
+            {loading && <div>Loading ...</div>}
 
             {lists && <ShoppingLists lists={lists} />}
         </HomeContainer>
@@ -210,9 +215,6 @@ const ShoppingLists = ({ lists }) => {
 
 const ListItem = ({ item, listsArr }) => {
 
-    const handleClick = (e) => {
-        /* console.log(e) */
-    }
 
 
     return (
@@ -225,7 +227,7 @@ const ListItem = ({ item, listsArr }) => {
             }
         }}
         >
-            <Li onClick={() => handleClick(item.id)} > <MyListIcon />  {item.name} <MoreIcon /> </Li>   {/* and id : {item.id} */}
+            <Li> <MyListIcon />  {item.name} <MoreIcon /> </Li>
         </StyledLink>
     )
 

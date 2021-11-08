@@ -54,7 +54,6 @@ const ButtonAlternative = styled.button`
     color: white;
     border: none;
     text-align: center;
-    /* font-family: Roboto; */
     border-radius: 10px;
     padding: 5px 30px;
     text-transform: uppercase;
@@ -92,7 +91,6 @@ export default function ClimateImpact() {
                     i form av minskad biologisk mångfald och ökad användning av bekämpningsmedel.</p>
 
                 <GreenPointsCircle percentage={percentage}> {percentage}
-                    {/* <Presentage>%</Presentage> */}
                     <span>%</span>
                 </GreenPointsCircle>
 

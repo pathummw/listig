@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Button = styled.button`
