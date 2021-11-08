@@ -1,7 +1,7 @@
-import { set } from '@firebase/database'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
+import swal from 'sweetalert';
 
 
 const Container = styled.div`
@@ -68,8 +68,28 @@ export default function NewListPopup() {
         }
     }, [])
 
+    const validateLisytName = (name) => {
+        var validRegex = /^([a-zA-Z0-9 _-]+)$/;
+
+        if (name.match(validRegex)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     const handleChange = (e) => {
-        setListName(e.target.value);
+        if (validateLisytName(e.target.value)) {
+            setListName(e.target.value);
+        } else {
+            swal({
+                title: "Listnamn kan bara innehålla tecken och siffror",
+                text: "Försök igen",
+                icon: "error",
+                button: "Okej",
+            });
+        }
     }
 
     return (
