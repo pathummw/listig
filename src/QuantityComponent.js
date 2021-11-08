@@ -44,17 +44,29 @@ export default function QuantityComponent(props) {
     const [quantity, setQuantity] = useState(1);
     const [quantityType, setQuantityType] = useState('st');
 
+    useEffect(() => {
+        let isLoading = true;
+
+        if (isLoading) {
+            setQuantity(props.quantity); //Set the quantity on Q input that get from db
+        }
+
+        return () => {
+            isLoading = false;
+        }
+    }, [])
+
 
     const handlePlus = () => {
-        setQuantity(quantity + 1);
-        props.handleCallback(quantity + 1); //Call back funtion to send quantity data to parent component
+        setQuantity(Number(quantity) + 1);
+        props.handleCallback(Number(quantity) + 1); //Call back funtion to send quantity data to parent component
     }
     const handleMinus = () => {
         /* if (quantity === 1) {
             alert("Vänta..want to delete item")
         } else */ {  //When user click the (-) button, delete the item when the Q is = 0
-            setQuantity(quantity - 1);
-            props.handleCallback(quantity - 1);
+            setQuantity(Number(quantity) - 1);
+            props.handleCallback(Number(quantity) - 1);
         }
 
     }

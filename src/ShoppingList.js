@@ -259,6 +259,8 @@ export default function ShoppingList() {
     const handleSnackbar = (message, severity) => {
         setMessage(message);
         setSeverity(severity);
+
+        console.log("handle snack bar")
     };
 
     const clearSnackbar = () => {
@@ -520,8 +522,8 @@ const Item = ({ item, currentUser, listName, handleDeleted, handleSnackbar, mess
     return (
         <div>
 
-            <Li expand={expand} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> <ItemSpan checked={checked}> {item.label} </ItemSpan> <Icon onClick={handleOnClickExpand} />
-                <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} /></QuantityContainerSpan>
+            <Li expand={expand} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> <ItemSpan checked={checked}> {item.label}  </ItemSpan> <Icon onClick={handleOnClickExpand} />
+                <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} quantity={item.quantity} /></QuantityContainerSpan>
 
                 <section>
                     <StyledLink to={{
