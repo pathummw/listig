@@ -38,30 +38,38 @@ const Ul = styled.ul`
 `
 
 const glowing = keyframes`
- 0% { box-shadow: 0 0 1px 0.5px #EDE641}
+ /* 0% { box-shadow: 0 0 1px 0.5px #EDE641}
  50% { box-shadow: 0 0 5px 0.5px #EDE641}
- 100% { box-shadow: 0 0 1px 0.5px #EDE641}
+ 100% { box-shadow: 0 0 1px 0.5px #EDE641} */
+ 
+ 0% {
+    border: solid 2px #FFFF00;
+    box-shadow: 0 0 3px #FFFF00;
+  }
+  50% {
+    border: solid 2px #FFFF00;
+    box-shadow: 0 0 10px #FFFF00;
+  }
+  100% {
+    border: solid 2px #FFFF00;
+    box-shadow: 0 0 3px #FFFF00;
+  }
 `
 const anm = keyframes`
 `
 const Li = styled.li`
-    /* display: flex; */
     background-color: #E1E1E1;
     color: #353535;
     font-weight: 500;
+    font-family: Roboto;
     padding: 5px;
     margin: 7px auto;
     border-radius: 10px;
     cursor: pointer;
-    /* box-shadow: ${props => props.green_points < 3 ? '0 0 8px 1px #f3453e' : 'none'}; */
     animation: ${props => props.green_points < 3 ? 'glowing 1300ms infinite' : 'none'} ;
     animation-name: ${props => props.green_points < 3 ? glowing : anm};
     animation-duration: 1s;
     animation-iteration-count: infinite;
-    /* &:section{
-        text-decoration: none;
-        background-color: red;
-    } */
     transition: 1s;
     position: relative;  //To set quantity and expand components relative to the Li
     ${props => {
@@ -134,6 +142,7 @@ const KlimatKvitto = styled.div`
     bottom: 5px;
     color:  ${props => props.color == '#EDE641' ? '#000000' : '#FFFFFF'};
     height: ${props => props.expandKvitto ? '90vh' : ''};
+    font-weight: 500;
     h1{
         text-align: center; 
         font-weight: 400;
@@ -259,8 +268,6 @@ export default function ShoppingList() {
     const handleSnackbar = (message, severity) => {
         setMessage(message);
         setSeverity(severity);
-
-        console.log("handle snack bar")
     };
 
     const clearSnackbar = () => {
