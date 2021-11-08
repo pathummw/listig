@@ -206,7 +206,8 @@ export default function ShoppingList() {
                     //console.log("Created a new Shopping list successfully")
                 })
                 .catch((error) => {
-                    setMessage(error);
+                    handleSnackbar('Något gick fel', 'error');
+                    //setMessage(error);
                 })
             return () => {
             }
@@ -328,6 +329,7 @@ const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar,
         //Check temp array: to check if the selected item is alredy exist on the shopping list
         if (!myshoppingList.find(i => i.id === selectedItem.id)) {
 
+
             setMyShoppingList([
                 ...myshoppingList,
                 selectedItem
@@ -341,7 +343,7 @@ const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar,
                 label: selectedItem.label,
                 green_points: selectedItem.green_points,
                 quantity_type: selectedItem.quantity_type,
-                quantity: '1',
+                quantity: 1,
                 category: selectedItem.category,
                 group: selectedItem.group,
                 isSelected: false
@@ -521,7 +523,7 @@ const Item = ({ item, currentUser, listName, handleDeleted, handleSnackbar, mess
         <div>
 
             <Li expand={expand} green_points={greenPoints} onClick={handleOnClickExpand} > <Checkbox onChange={handleChangeCheckbox} checked={checked} /> <ItemSpan checked={checked}> {item.label}  </ItemSpan> <Icon onClick={handleOnClickExpand} />
-                <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} quantity={item.quantity} /></QuantityContainerSpan>
+                <QuantityContainerSpan><QuantityComponent handleCallback={handleCallback} quantity={item.quantity} quantity_type={item.quantity_type} /></QuantityContainerSpan>
 
                 <section>
                     <StyledLink to={{

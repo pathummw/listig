@@ -5,6 +5,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 100,
         green_points: 3,
         quantity_type: 'st',
+        quantity: 1,
         category: 'candy',
         group: 'chocolate'
     },
@@ -14,6 +15,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 101,
         green_points: 5,
         quantity_type: 'st',
+        quantity: 1,
         category: 'candy',
         group: 'chocolate'
     },
@@ -23,6 +25,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 200,
         green_points: 4,
         quantity_type: 'pkt',
+        quantity: 1,
         category: 'fruits',
         group: 'strawbery'
     },
@@ -32,6 +35,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 201,
         green_points: 5,
         quantity_type: 'pkt',
+        quantity: 1,
         category: 'fruits',
         group: 'strawbery'
     },
@@ -41,6 +45,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 300,
         green_points: 3,
         quantity_type: 'st',
+        quantity: 1,
         category: 'vegitables',
         group: 'gurka'
     },
@@ -50,6 +55,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 301,
         green_points: 5,
         quantity_type: 'st',
+        quantity: 1,
         category: 'vegitables',
         group: 'gurka'
     },
@@ -59,6 +65,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 400,
         green_points: 2,
         quantity_type: 'kg',
+        quantity: 1,
         category: 'fruits',
         group: 'banana'
     },
@@ -68,6 +75,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 401,
         green_points: 5,
         quantity_type: 'kg',
+        quantity: 1,
         category: 'fruits',
         group: 'banana'
 
@@ -78,6 +86,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 500,
         green_points: 1,
         quantity_type: 'kg',
+        quantity: 1,
         category: 'meet',
         group: 'färs'
     },
@@ -87,6 +96,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 501,
         green_points: 5,
         quantity_type: 'kg',
+        quantity: 1,
         category: 'vego',
         group: 'färs'
     },
@@ -96,6 +106,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 502,
         green_points: 5,
         quantity_type: 'kg',
+        quantity: 1,
         category: 'vego',
         group: 'färs'
     },
@@ -105,6 +116,7 @@ export const GROCERY_ITEMS_DATA = [
         id: 503,
         green_points: 1,
         quantity_type: 'kg',
+        quantity: 1,
         category: 'meet',
         group: 'färs'
     }

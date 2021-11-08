@@ -8,7 +8,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export default function SnackbarComponent(props) {
 
-    console.log(props)
     const [open, setOpen] = useState(true);
 
     const handleOpen = () => {

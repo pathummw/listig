@@ -49,6 +49,7 @@ export default function QuantityComponent(props) {
 
         if (isLoading) {
             setQuantity(props.quantity); //Set the quantity on Q input that get from db
+            setQuantityType(props.quantity_type)
         }
 
         return () => {
@@ -72,8 +73,8 @@ export default function QuantityComponent(props) {
     }
 
     const handleOnChange = (e) => {
-        setQuantity(e.target.value);
-        props.handleCallback(e.target.value)
+        setQuantity(Number(e.target.value));
+        props.handleCallback(Number(e.target.value))
     }
 
     return (
