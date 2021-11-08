@@ -10,6 +10,7 @@ import { AuthContext } from "./Auth.js";
 
 
 
+
 const SignInContainer = styled.div`
     background-color: #DEDEDE;
     display: flex;
@@ -25,17 +26,18 @@ const SignInContainer = styled.div`
         background-position: 30% 150px;
     }
     @media ${devices.iphone6_7_8_X}{
-        background-position: 30% 200px;
+        background-position: 30% 220px;
     }
-    /* background-size: cover; */ /* Resize the background image to cover the entire container */
+    
 `
 
 const Form = styled.form`
     width: 65vw;
     background: #F7F7F7;
     text-align: left;
-    padding: 25px;
+    padding: 50px 25px;
     border-radius: 10px;
+    margin-bottom: 60px;
     @media ${devices.tablet} {
         /* margin: 10px; */
     }
@@ -96,6 +98,16 @@ const SignupSpan = styled.span`
     padding: 10px;
 `
 
+const Listig = styled.h1`
+    font-family: 'Oxygen';
+    margin-bottom: 50px;
+    font-weight: 400;
+    font-size: 3rem;
+`
+const H4 = styled.h4`
+   margin-bottom: 20px; 
+`
+
 export default function SignIn() {
     const emailRef = useRef('email')
     const passwordRef = useRef('lösenord')
@@ -129,7 +141,8 @@ export default function SignIn() {
     return (
 
         <SignInContainer>
-            <h1>LISTIG</h1>
+            <Listig>LISTIG</Listig>
+            <H4>KLIMATSMARTA INKÖPSLISTOR</H4>
             <Form onSubmit={handleSubmit}>
                 <Input type="email" ref={emailRef} />
                 <Input type="password" ref={passwordRef} />

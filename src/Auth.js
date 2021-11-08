@@ -8,7 +8,7 @@ const auth = getAuth();
 export const AuthProvider = ({ children }) => {
 
     const [currentUser, setCurrentUser] = useState(null);
-    const [pending, setPending] = useState(true);
+    const [pending, setPending] = useState(false);
 
     useEffect(() => {
 

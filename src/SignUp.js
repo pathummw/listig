@@ -21,7 +21,7 @@ const SignUpContainer = styled.div`
         background-position: 30% 150px;
     }
     @media ${devices.iphone6_7_8_X}{
-        background-position: 30% 200px;
+        background-position: 30% 220px;
     }
     /* background-size: cover; */ /* Resize the background image to cover the entire container */
 `

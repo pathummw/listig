@@ -175,7 +175,7 @@ export default function Home(props) {
 
             <NewListButton to="/create-new-list"> <PlusIcon /> Ny lista</NewListButton>
 
-            {loading && <div>Loading ...</div>}
+            {/* {loading && <div>Loading ...</div>} */}
 
             {lists && <ShoppingLists lists={lists} />}
         </HomeContainer>

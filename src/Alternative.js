@@ -131,8 +131,7 @@ export default function Alternative() {
                     <Li key={data.id}> <Checkbox onChange={() => handleChangeCheckbox(data)} />
                         <span>{data.label}</span> <GreenPointsPercentage green_points={data.green_points} />
                     </Li>
-                ))
-                }
+                ))}
             </Ul>
 
         </Container>

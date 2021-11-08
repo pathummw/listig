@@ -15,7 +15,6 @@ const Modal = styled.div`
     display: flex;
     flex-direction: column;
     width: 80vw;
-    /* height: 200px; */
     background-color: whitesmoke;
     padding: 20px;
 `
@@ -61,8 +60,10 @@ export default function NewListPopup() {
 
     useEffect(() => {
         const today = new Date();
+        const random = Math.floor(Math.random() * 100);
 
-        setListName(`Handla ${today.toDateString()}`)
+        setListName(`Handla ${today.toDateString()}_ ${random}`)
+
         return () => {
             //cleanup
         }
@@ -85,7 +86,6 @@ export default function NewListPopup() {
         } else {
             swal({
                 title: "Listnamn kan bara innehålla tecken och siffror",
-                text: "Försök igen",
                 icon: "error",
                 button: "Okej",
             });
