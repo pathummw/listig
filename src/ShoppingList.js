@@ -527,7 +527,9 @@ const Item = ({ item, currentUser, listName, handleDeleted, handleSnackbar, mess
                     <StyledLink to={{
                         pathname: "/climate-impact",
                         state: {
-                            item: item
+                            item: item,
+                            currentUser: currentUser,
+                            listName: listName
                         }
                     }}>
                         <SpanButton> <MyInfoIcon /> Klimat påverkan</SpanButton>

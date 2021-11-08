@@ -69,6 +69,8 @@ export default function ClimateImpact() {
 
     const location = useLocation();
     const item = location.state?.item;
+    const currentUser = location.state?.currentUser;
+    const listName = location.state?.listName;
     let history = useHistory();
 
     const percentage = ((item.green_points / 5) * 100);
@@ -97,7 +99,9 @@ export default function ClimateImpact() {
                 <StyledLink to={{
                     pathname: "/alternative",
                     state: {
-                        item: item
+                        item: item,
+                        currentUser: currentUser,
+                        listName: listName
                     }
                 }}>
 

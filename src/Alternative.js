@@ -76,6 +76,7 @@ export default function Alternative() {
     const currentUser = location.state?.currentUser;
     const listName = location.state?.listName;
 
+
     let history = useHistory();
 
 
@@ -100,16 +101,18 @@ export default function Alternative() {
 
     const handleChangeCheckbox = (data) => {
         //Send selected item to firebase save function to save to db
+        console.log(data)
         saveItem(currentUser, listName, data)
         //Delete item after slecting the alternative item
         deleteItem(currentUser, listName, item);
+        console.log(item)
 
-        swal({
+        /* swal({
             title: `${item.label} bytt ut med`,
             text: `${data.label}`,
             icon: "success",
             button: "Okej",
-        });
+        }); */
 
     }
 
