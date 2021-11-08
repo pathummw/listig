@@ -23,7 +23,6 @@ const SignUpContainer = styled.div`
     @media ${devices.iphone6_7_8_X}{
         background-position: 30% 220px;
     }
-    /* background-size: cover; */ /* Resize the background image to cover the entire container */
 `
 
 const Form = styled.form`
@@ -32,9 +31,6 @@ const Form = styled.form`
     text-align: left;
     padding: 25px;
     border-radius: 10px;
-    @media ${devices.tablet} {
-        /* margin: 10px; */
-    }
 `
 
 const Input = styled.input`
@@ -73,7 +69,6 @@ export default function SignUp() {
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
-    const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory()
 
@@ -126,7 +121,6 @@ export default function SignUp() {
     return (
         <SignUpContainer>
             <Form onSubmit={handleSubmit}>
-                {error}
                 <Input type="email" ref={emailRef} placeholder="E-mail" />
                 <Input type="password" ref={passwordRef} placeholder="Lösenord" />
                 <Input type="password" ref={passwordConfirmRef} placeholder="Bekräfta lösenord" />

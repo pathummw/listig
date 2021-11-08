@@ -1,4 +1,4 @@
-import { useRef, useState, createContext, useContext } from 'react'
+import { useRef, useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import { signin } from "./firebase"
 import styled from 'styled-components';
@@ -110,8 +110,6 @@ const H4 = styled.h4`
 export default function SignIn() {
     const emailRef = useRef('email')
     const passwordRef = useRef('lösenord')
-    const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
     const history = useHistory()
 
 

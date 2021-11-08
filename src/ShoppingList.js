@@ -178,7 +178,6 @@ const KlimatInfoSection = styled.span`
 export default function ShoppingList() {
     const location = useLocation();
     const listName = location.state?.name;
-    const listId = location.state?.id;
     const newList = location.state?.new_list;
 
     const { currentUser } = useContext(AuthContext);
@@ -296,7 +295,6 @@ const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar,
     const [greenPointsTotal, setGreenPointsTotal] = useState(null);
 
 
-    var itemExist = false;
     /* --------------If user clicked on a already created list,fetch the list from db-------------------- */
     useEffect(() => {
 
@@ -334,7 +332,6 @@ const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar,
                 ...myshoppingList,
                 selectedItem
             ]);
-            itemExist = false;
 
             /* console.log(myshoppingList) */
             ////1.Save the selected item to the db if the item not exist already
@@ -358,7 +355,6 @@ const SearchBar = ({ options, listName, currentUser, listObjArr, handleSnackbar,
                 })
 
         } else {
-            itemExist = true;
 
             swal({
                 title: `${selectedItem.label}`,
